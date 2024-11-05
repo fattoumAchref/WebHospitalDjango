@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from personnel import views as pv
 from patient import views
+from dossiermedical import views as vd
 from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +28,5 @@ urlpatterns = [
     path('', views.login_view, name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', auth_views.LoginView.as_view(), name='login'),
+    path('ajouter-dossier/', vd.ajouter_dossier_medical, name='ajouter_dossier_medical'),
 ]

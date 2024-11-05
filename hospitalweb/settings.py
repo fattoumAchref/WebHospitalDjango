@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'personnel',
     'patient',
+    'dossiermedical',
+    'facture',
     'bootstrap5',
 ]
 
