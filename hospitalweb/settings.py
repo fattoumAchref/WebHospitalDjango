@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'patient',
     'dossiermedical',
     'facture',
+    'appointment',
     'bootstrap5',
 ]
 
@@ -132,3 +133,4 @@ AUTH_USER_MODEL = 'patient.CustomUser'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 STATIC_URL = '/static/'
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

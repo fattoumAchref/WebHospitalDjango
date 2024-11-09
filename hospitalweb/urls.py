@@ -29,4 +29,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', auth_views.LoginView.as_view(), name='login'),
     path('ajouter-dossier/', vd.ajouter_dossier_medical, name='ajouter_dossier_medical'),
+    
 ]

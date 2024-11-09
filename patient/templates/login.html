@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
     <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -129,15 +133,17 @@
     </style>
 </head>
 <body>
+    
     <div class="container">
         {% load static %}
 <div class="image-section" >
     <img src="{% static 'hospital-login.png' %}" alt="Hospital Login" style="width: 120%;height: 100%;">
 
 </div>
-
+    
         <div class="form-section">
             <h2>Login</h2>
+             
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
@@ -147,6 +153,8 @@
                     <button type="button" class="btn">S'inscrire</button>
                 </a>
             </form>
+
+            
         </div>
     </div>
 </body>

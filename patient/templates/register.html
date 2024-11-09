@@ -150,45 +150,48 @@
 
         <div class="form-section">
             <h2>Register</h2>
+             <!-- Boîte de succès -->
+            {% if messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
             <form method="post">
                 {% csrf_token %}
-                <!-- Remplacement de First Name et Last Name par Username -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" required>
-                    </div>
+                {{ form.non_field_errors }}
+                <div class="form-group">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                    {{ form.username.errors }}
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone</label>
-                        <input type="text" id="phone" name="phone" required>
-                    </div>
+                <div class="form-group">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                    {{ form.email.errors }}
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password1" name="password1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password2">Confirm Password</label>
-                        <input type="password" id="password2" name="password2" required>
-                    </div>
+                <div class="form-group">
+                    {{ form.phone_number.label_tag }}
+                    {{ form.phone_number }}
+                    {{ form.phone_number.errors }}
                 </div>
-
-                <button type="submit" class="btn">Register</button>
-                <hr>
-                <a href="{% url 'login' %}">
-                    <button type="button" class="btn">Login</button>
-                </a>
+                <div class="form-group">
+                    {{ form.password1.label_tag }}
+                    {{ form.password1 }}
+                    {{ form.password1.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.password2.label_tag }}
+                    {{ form.password2 }}
+                    {{ form.password2.errors }}
+                </div>
+                <button type="submit" class="btn btn-primary">S'inscrire</button>
             </form>
         </div>
     </div>
+
+    
 </body>
 </html>
