@@ -19,6 +19,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'contact_us' %}">Contact</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'make_appointment' %}">rendez-vous</a>
+                    </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <span class="nav-link">Bienvenue, {{ user.username }}</span>

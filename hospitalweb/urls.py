@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from personnel import views as pv
 from patient import views
+from appointment import views as va
 from dossiermedical import views as vd
 from django.contrib.auth import views as auth_views
 urlpatterns = [
@@ -29,5 +30,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', auth_views.LoginView.as_view(), name='login'),
     path('ajouter-dossier/', vd.ajouter_dossier_medical, name='ajouter_dossier_medical'),
-    
+    path('rendez-vous/', va.make_appointment, name='make_appointment'),
 ]
