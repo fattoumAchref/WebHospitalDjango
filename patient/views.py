@@ -33,7 +33,7 @@ def login_view(request):
     return render(request, 'login.html', {'form': form})
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'index.html')
 
 def about_us(request):
     return render(request, 'about_us.html')

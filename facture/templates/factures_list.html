@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factures</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .facture {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .facture .titre {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .facture .details {
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Liste des factures</h1>
+    <div>
+        {% for facture in factures %}
+            <div class="facture">
+                <div class="titre">Facture #{{ facture.id }} - {{ facture.patient.username }}</div>
+                <div class="details">
+                    <p><strong>Montant:</strong> {{ facture.montant }} €</p>
+                    <p><strong>Date d'émission:</strong> {{ facture.date_emission }}</p>
+                    <p><strong>Description:</strong> {{ facture.description }}</p>
+                    <p><strong>Statut:</strong> {{ facture.est_payee|yesno:"Payée,Non payée" }}</p>
+                </div>
+            </div>
+        {% empty %}
+            <p>Aucune facture trouvée.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
