@@ -1,0 +1,133 @@
+/* Arrière-plan avec une image réelle */
+body {
+    margin: 0;
+    padding: 0;
+    background: url('http://127.0.0.1:8000/static/patient/assets/img/bghopitale.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative; /* Nécessaire pour positionner l'overlay */
+}
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Ombre noire avec 50% de transparence */
+    z-index: -1; /* Assure que l'overlay reste derrière le contenu */
+}
+/* Container avec flou et dimensions réduites */
+.container {
+    backdrop-filter: blur(5px); /* Flou sur le container */
+    border-radius: 12px;
+    padding: 15px; /* Réduction du padding */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Ombre un peu plus légère */
+    width: 100%;
+    max-width: 400px; /* Limite la largeur du container à 400px */
+    height: auto; /* Ajuste la hauteur en fonction du contenu */
+
+}
+
+
+/* Titre */
+h2.text-center {
+    font-size: 1.8rem; /* Ajuste la taille du titre */
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Formulaire */
+.form-group label {
+    font-size: 1.2rem;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    font-family: Arial, sans-serif; /* Applique la police Arial */
+}
+
+
+.form-group input {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 0.9rem;
+    width: 80%;
+    margin-bottom: 20px;
+    transition: border-color 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.9);
+    
+}
+
+.form-group input:focus {
+    border-color: #4caf50;
+    box-shadow: 0px 0px 5px rgba(76, 175, 80, 0.3);
+    outline: none;
+}
+
+/* Boutons - Nouveau format et couleurs */
+.btn {
+    border-radius: 50px; /* Bord arrondi pour un look moderne */
+    padding: 8px 16px; /* Boutons plus petits et compacts */
+    font-size: 0.85rem; /* Taille de texte réduite */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: none;
+    text-align: center;
+}
+
+/* Bouton primaire - Bleu doux */
+.btn-primary {
+    background-color: #5bc0de; /* Bleu clair mais professionnel */
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #31b0d5; /* Bleu plus foncé au survol */
+    transform: scale(1.05);
+}
+
+/* Bouton secondaire - Gris pastel */
+.btn-secondary {
+    background-color: #e7e7e7; /* Gris clair pastel pour un effet doux */
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background-color: #c6c6c6; /* Gris un peu plus foncé au survol */
+    transform: scale(1.05);
+}
+
+/* Bouton danger - Vert doux */
+.btn-danger {
+    background-color: #28a745; /* Vert doux, couleur hospitalière apaisante */
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #218838; /* Vert un peu plus foncé au survol */
+    transform: scale(1.05);
+}
+
+/* Séparation */
+hr.my-4 {
+    border-top: 2px solid #dee2e6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px 20px;
+    }
+
+    h2.text-center {
+        font-size: 1.5rem;
+    }
+}
