@@ -47,7 +47,7 @@
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <span class="nav-link">Welcome, {{ user.username }}</span>
+                    <a class="nav-link" href="{% url 'update_patient' %}"><span class="nav-link">Welcome, {{ user.username }}</span></a>
                 </li>
                     <li class="nav-item">
                         <a class="btn btn-primary ml-lg-3" href="{% url 'login' %}">Déconnexion</a>

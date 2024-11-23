@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
 from django.contrib import messages
+from .forms import PatientUpdateForm
+from django.contrib.auth.decorators import login_required
 
 def register(request):
     if request.method == 'POST':
@@ -40,3 +42,26 @@ def about_us(request):
 
 def contact_us(request):
     return render(request, 'contact_us.html')
+
+
+@login_required
+def update_patient(request):
+    if request.method == 'POST':
+        form = PatientUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Vos informations ont été mises à jour avec succès.")
+            return redirect('update_patient')
+    else:
+        form = PatientUpdateForm(instance=request.user)
+    
+    return render(request, 'modif_patient.html', {'form': form})
+
+@login_required
+def delete_patient(request):
+    if request.method == 'POST':
+        request.user.delete()
+        messages.success(request, "Votre compte a été supprimé avec succès.")
+        
+        return redirect('home')
+    return render(request, 'delete_patient.html')

@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from .models import CustomUser
 from django import forms
 
@@ -38,3 +38,15 @@ class CustomAuthenticationForm(AuthenticationForm):
     class Meta:
         model = CustomUser
         
+
+class PatientUpdateForm(UserChangeForm):
+    password = None  # Supprime le champ du mot de passe
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'phone_number']  # Adaptez les champs à votre modèle
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+        }

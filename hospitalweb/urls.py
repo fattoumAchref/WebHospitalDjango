@@ -34,5 +34,7 @@ urlpatterns = [
     path('appointment/update/<int:appointment_id>/', va.update_appointment, name='update_appointment'),
     path('appointment/', va.appointment_list, name='appointment_list'),
     path('appointment/<int:appointment_id>/delete/', va.delete_appointment, name='delete_appointment'),
+     path('update/', views.update_patient, name='update_patient'),
+    path('delete/', views.delete_patient, name='delete_patient'),
 
     ]
