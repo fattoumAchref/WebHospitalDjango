@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'facture',
     'appointment',
     'bootstrap5',
+    
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,12 @@ AUTH_USER_MODEL = 'patient.CustomUser'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Utilisez le serveur SMTP approprié
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'salimmnif123@gmail.com'  # Votre adresse e-mail
+EMAIL_HOST_PASSWORD = 'xcsr htsl kymj jygy'  # Votre mot de passe ou mot de passe d'application Gmail
+DEFAULT_FROM_EMAIL = 'salimmnif123@gmail.com'

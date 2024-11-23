@@ -66,3 +66,20 @@ def delete_appointment(request, appointment_id):
     appointment.delete()
     messages.success(request, "Le rendez-vous a été supprimé avec succès.")
     return redirect('list_appointments')  # Remplacez par le nom de votre vue de liste.
+
+from django.core.mail import send_mail
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.conf import settings
+
+def send_confirmation_email(request):
+    # Contenu de l'e-mail
+    subject = 'Confirmation de votre rendez-vous'
+    message = 'Votre rendez-vous a été confirmé avec succès.'
+    from_email = settings.DEFAULT_FROM_EMAIL
+    recipient_list = ['destinataire@example.com']  # Liste des destinataires
+
+    # Envoi de l'e-mail
+    send_mail(subject, message, from_email, recipient_list)
+    
+    return HttpResponse('E-mail envoyé avec succès !')
