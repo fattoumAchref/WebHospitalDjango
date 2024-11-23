@@ -20,6 +20,7 @@ from personnel import views as pv
 from patient import views
 from appointment import views as va
 from dossiermedical import views as vd
+from facture import views as fa
 from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,6 +34,7 @@ urlpatterns = [
     path('rendez-vous/', va.make_appointment, name='make_appointment'),
     path('appointment/update/<int:appointment_id>/', va.update_appointment, name='update_appointment'),
     path('appointment/', va.appointment_list, name='appointment_list'),
+    path('facture/', fa.facture_list, name='facture_list'),
     path('appointment/<int:appointment_id>/delete/', va.delete_appointment, name='delete_appointment'),
      path('update/', views.update_patient, name='update_patient'),
     path('delete/', views.delete_patient, name='delete_patient'),
