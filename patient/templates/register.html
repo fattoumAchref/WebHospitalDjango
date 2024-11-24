@@ -1,156 +1,21 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     {% load bootstrap5 %}
     {% bootstrap_css %}
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-
-        .container {
-            display: flex;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            width: 900px;
-            height: auto;
-        }
-
-        .container .image-section {
-            width: 50%;
-            background: url() no-repeat center center;
-            background-size: cover;
-        }
-
-        .container .form-section {
-            width: 50%;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-row {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .form-group {
-            flex: 1;
-            margin-bottom: 15px;
-            padding-right: 10px;
-        }
-
-        form input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        button {
-            padding: 10px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .btn {
-            --color: #00A97F;
-            --color2: rgb(10, 25, 30);
-            padding: 0.8em 1.75em;
-            background-color: transparent;
-            border-radius: 6px;
-            border: .3px solid var(--color);
-            transition: .5s;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            z-index: 1;
-            font-weight: 300;
-            font-size: 17px;
-            font-family: 'Roboto', 'Segoe UI', sans-serif;
-            text-transform: uppercase;
-            color: var(--color);
-        }
-
-        .btn::after, .btn::before {
-            content: '';
-            display: block;
-            height: 100%;
-            width: 100%;
-            transform: skew(90deg) translate(-50%, -50%);
-            position: absolute;
-            inset: 50%;
-            left: 25%;
-            z-index: -1;
-            transition: .5s ease-out;
-            background-color: var(--color);
-        }
-
-        .btn::before {
-            top: -50%;
-            left: -25%;
-            transform: skew(90deg) rotate(180deg) translate(-50%, -50%);
-        }
-
-        .btn:hover::before {
-            transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
-        }
-
-        .btn:hover::after {
-            transform: skew(45deg) translate(-50%, -50%);
-        }
-
-        .btn:hover {
-            color: var(--color2);
-        }
-
-        .btn:active {
-            filter: brightness(.7);
-            transform: scale(.98);
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'patient/assets/css/register.css' %}">
 </head>
 <body>
-    <div class="container">
-        {% load static %}
-        <div class="image-section">
-            <img src="{% static 'hospital-login.png' %}" alt="Hospital Login" style="width: 120%;height: 100%;">
-        </div>
+    <div class="main-container">
+        <div class="form-container">
+            <h1>Inscription</h1>
 
-        <div class="form-section">
-            <h2>Register</h2>
-             <!-- Boîte de succès -->
+            <!-- Boîte de succès -->
             {% if messages %}
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {% for message in messages %}
@@ -159,39 +24,48 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endif %}
+
             <form method="post">
                 {% csrf_token %}
-                {{ form.non_field_errors }}
-                <div class="form-group">
+                
+                <div class="input-group">
                     {{ form.username.label_tag }}
                     {{ form.username }}
                     {{ form.username.errors }}
                 </div>
-                <div class="form-group">
+
+                <div class="input-group">
                     {{ form.email.label_tag }}
                     {{ form.email }}
                     {{ form.email.errors }}
                 </div>
-                <div class="form-group">
+
+                <div class="input-group">
                     {{ form.phone_number.label_tag }}
                     {{ form.phone_number }}
                     {{ form.phone_number.errors }}
                 </div>
-                <div class="form-group">
+
+                <div class="input-group">
                     {{ form.password1.label_tag }}
                     {{ form.password1 }}
                     {{ form.password1.errors }}
                 </div>
-                <div class="form-group">
+
+                <div class="input-group">
                     {{ form.password2.label_tag }}
                     {{ form.password2 }}
                     {{ form.password2.errors }}
                 </div>
-                <button type="submit" class="btn btn-primary">S'inscrire</button>
+
+                <button type="submit">S'inscrire</button>
             </form>
+
+            <div class="footer">
+                <p>Vous avez déjà un compte ? <a href="{% url 'login' %}">Se connecter</a></p>
+            </div>
         </div>
     </div>
 
-    
 </body>
 </html>

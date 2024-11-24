@@ -26,6 +26,7 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('personnel/',include('personnel.urls')),
@@ -42,5 +43,7 @@ urlpatterns = [
     path('appointment/<int:appointment_id>/delete/', va.delete_appointment, name='delete_appointment'),
      path('update/', views.update_patient, name='update_patient'),
     path('delete/', views.delete_patient, name='delete_patient'),
+    path('facture/pdf/<int:facture_id>/', fa.generate_pdf, name='generate_pdf'),
+
 
     ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

@@ -1,3 +1,5 @@
+import csv
+from django.http import HttpResponse
 from django.contrib import admin
 from .models import Facture
 
@@ -29,6 +31,26 @@ class FactureAdmin(admin.ModelAdmin):
 
     # Lecture seule pour les champs automatiquement définis
     readonly_fields = ('date_emission',)
+
+    # Action pour générer le CSV
+    def export_as_csv(self, request, queryset):
+        # Création de la réponse HTTP avec un type MIME CSV
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="factures.csv"'
+        
+        # Création de l'objet CSV
+        writer = csv.writer(response)
+        writer.writerow(['ID', 'Patient', 'Description', 'Montant', 'Date Emission', 'Date Paiement', 'Est Payée'])  # En-têtes du CSV
+        
+        # Écriture des données du queryset dans le CSV
+        for facture in queryset:
+            writer.writerow([facture.id, facture.patient.username, facture.description, facture.montant, facture.date_emission, facture.date_paiement, facture.est_payee])
+        
+        return response
+    
+    # Définir l'action dans l'admin
+    export_as_csv.short_description = "Exporter en CSV"
+    actions = [export_as_csv]  # Ajout de l'action à la liste des actions disponibles
 
 # Enregistrement du modèle et de l'administration personnalisée
 admin.site.register(Facture, FactureAdmin)
