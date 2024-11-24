@@ -1,0 +1,172 @@
+/* Reset de base et police */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-image: url("/static/patient/assets/img/loginbg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Conteneur principal */
+.main-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* Conteneur du formulaire */
+.form-container {
+    border-radius: 12px;
+    border: 0px solid #512da8;
+    box-shadow: 0 6px 15px rgba(0.5, 0.1, 0.1, 0.3);
+    width: 90%; /* Diminue la largeur */
+    max-width: 400px; /* Largeur maximale ajustée */
+    padding: 20px; /* Réduit l'espace intérieur */
+    position: relative;
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: fadeIn 1s ease-in-out, slideUp 0.6s ease-out;
+}
+
+/* Animation fade-in et slide-up */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    text-align: center;
+    font-size: 24px; /* Réduit la taille du titre */
+    color: #512da8;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px; /* Réduit l'espacement des lettres */
+}
+
+/* Champs de saisie */
+.input-group {
+    margin-bottom: 20px; /* Réduit l'espace entre les champs */
+    position: relative;
+}
+
+input {
+    width: 100%;
+    padding: 12px 14px; /* Réduit le padding pour les champs */
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    font-size: 14px; /* Réduit la taille de la police */
+    color: #333;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease-in-out;
+}
+
+input:focus {
+    border-color: #512da8;
+    background-color: #f3e5f5;
+    box-shadow: 0 0 8px rgba(81, 45, 168, 0.3);
+    outline: none;
+}
+
+input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Effet sur le bouton */
+button {
+    padding: 12px 16px; /* Réduit le padding pour le bouton */
+    background-color: #512da8;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px; /* Réduit la taille de la police */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 15px;
+}
+
+button:hover {
+    background-color: #5e35b1;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(81, 45, 168, 0.4);
+}
+
+button:active {
+    background-color: #512da8;
+    transform: scale(1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Erreurs de formulaire */
+.error {
+    color: red;
+    font-size: 12px; /* Réduit la taille des erreurs */
+    margin-top: 5px;
+}
+
+/* Liens */
+a {
+    color: #512da8;
+    text-decoration: none;
+    font-size: 12px; /* Réduit la taille de la police des liens */
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #673ab7;
+    transform: scale(1.05);
+}
+
+/* Footer pour l'inscription */
+.footer {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 12px; /* Réduit la taille de la police dans le footer */
+}
+
+/* Effet de survol du conteneur */
+label {
+    font-size: 14px; /* Réduit la taille de la police des labels */
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 8px;
+    display: block;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+label:hover {
+    color: #673ab7;
+}

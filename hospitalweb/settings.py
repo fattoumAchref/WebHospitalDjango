@@ -125,10 +125,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+# Ajouter si nécessaire
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / "static",  # Indique où se trouve le dossier static de ton projet
 ]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -146,3 +149,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'salimmnif123@gmail.com'  # Votre adresse e-mail
 EMAIL_HOST_PASSWORD = 'xcsr htsl kymj jygy'  # Votre mot de passe ou mot de passe d'application Gmail
 DEFAULT_FROM_EMAIL = 'salimmnif123@gmail.com'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

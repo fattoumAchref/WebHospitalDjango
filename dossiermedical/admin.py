@@ -3,7 +3,7 @@ from .models import DossierMedical
 
 class DossierMedicalAdmin(admin.ModelAdmin):
     # Champs affichés dans la liste
-    list_display = ('id', 'patient', 'date_creation', 'dernier_mise_a_jour', 'description_excerpt')
+    list_display = ('id', 'patient', 'date_creation', 'dernier_mise_a_jour', 'description_excerpt','fichier')
 
     # Champs pour la recherche
     search_fields = ('patient__username', 'description')
@@ -20,7 +20,7 @@ class DossierMedicalAdmin(admin.ModelAdmin):
             'fields': ('patient',),
         }),
         ('Détails du Dossier Médical', {
-            'fields': ('description',),
+            'fields': ('description','fichier'),
         }),
         ('Dates', {
             'fields': ('date_creation', 'dernier_mise_a_jour'),

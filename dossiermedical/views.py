@@ -10,7 +10,7 @@ def est_admin(user):
 @user_passes_test(est_admin)
 def ajouter_dossier_medical(request):
     if request.method == 'POST':
-        form = DossierMedicalForm(request.POST)
+        form = DossierMedicalForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
             return redirect('liste_dossiers_medicaux')  # Redirige vers une page où sont listés les dossiers médicaux

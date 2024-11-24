@@ -2,8 +2,8 @@
 body {
     margin: 0;
     padding: 0;
-    background: url('http://127.0.0.1:8000/static/patient/assets/img/bghopitale.jpg') no-repeat center center fixed;
     background-size: cover;
+    background-color: #fff;
     font-family: 'Roboto', sans-serif;
     display: flex;
     justify-content: center;
@@ -11,33 +11,22 @@ body {
     height: 100vh;
     position: relative; /* Nécessaire pour positionner l'overlay */
 }
-body::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Ombre noire avec 50% de transparence */
-    z-index: -1; /* Assure que l'overlay reste derrière le contenu */
-}
+
 /* Container avec flou et dimensions réduites */
 .container {
     backdrop-filter: blur(5px); /* Flou sur le container */
     border-radius: 12px;
-    padding: 15px; /* Réduction du padding */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Ombre un peu plus légère */
+    padding: 20px; /* Réduit le padding pour un effet plus compact */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Ombre légère */
     width: 100%;
-    max-width: 400px; /* Limite la largeur du container à 400px */
-    height: auto; /* Ajuste la hauteur en fonction du contenu */
-
+    max-width: 350px; /* Limite la largeur du container */
+    height: auto;
 }
-
 
 /* Titre */
 h2.text-center {
-    font-size: 1.8rem; /* Ajuste la taille du titre */
-    color: #ffffff;
+    font-size: 1.8rem;
+    color: rgb(0, 0, 0);
     margin-bottom: 20px;
     text-align: center;
     font-weight: bold;
@@ -45,25 +34,25 @@ h2.text-center {
 
 /* Formulaire */
 .form-group label {
-    font-size: 1.2rem;
-    color: #ffffff;
+    font-size: 1rem; /* Taille du texte réduite pour les labels */
+    color: rgb(0, 0, 0);
     margin-bottom: 0.5rem;
-    font-family: Arial, sans-serif; /* Applique la police Arial */
+    font-family: Arial, sans-serif;
 }
 
-
+/* Champs de saisie réduits pour l'inscription */
 .form-group input {
     border-radius: 5px;
     border: 1px solid #ccc;
-    padding: 10px;
-    font-size: 0.9rem;
-    width: 80%;
-    margin-bottom: 20px;
+    padding: 8px 12px; /* Moins de padding pour des champs plus petits */
+    font-size: 0.85rem; /* Taille de police réduite */
+    width: 100%; /* Champs prennent toute la largeur disponible */
+    margin-bottom: 15px; /* Espacement plus petit sous chaque champ */
     transition: border-color 0.3s ease;
     background-color: rgba(255, 255, 255, 0.9);
-    
 }
 
+/* Style des champs de saisie lorsqu'ils sont en focus */
 .form-group input:focus {
     border-color: #4caf50;
     box-shadow: 0px 0px 5px rgba(76, 175, 80, 0.3);
@@ -72,9 +61,9 @@ h2.text-center {
 
 /* Boutons - Nouveau format et couleurs */
 .btn {
-    border-radius: 50px; /* Bord arrondi pour un look moderne */
-    padding: 8px 16px; /* Boutons plus petits et compacts */
-    font-size: 0.85rem; /* Taille de texte réduite */
+    border-radius: 50px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
     transition: background-color 0.3s ease, transform 0.2s ease;
     width: auto;
     margin-top: 10px;
@@ -85,34 +74,34 @@ h2.text-center {
 
 /* Bouton primaire - Bleu doux */
 .btn-primary {
-    background-color: #5bc0de; /* Bleu clair mais professionnel */
+    background-color: #5bc0de;
     color: #fff;
 }
 
 .btn-primary:hover {
-    background-color: #31b0d5; /* Bleu plus foncé au survol */
+    background-color: #31b0d5;
     transform: scale(1.05);
 }
 
 /* Bouton secondaire - Gris pastel */
 .btn-secondary {
-    background-color: #e7e7e7; /* Gris clair pastel pour un effet doux */
+    background-color: #e7e7e7;
     color: #333;
 }
 
 .btn-secondary:hover {
-    background-color: #c6c6c6; /* Gris un peu plus foncé au survol */
+    background-color: #c6c6c6;
     transform: scale(1.05);
 }
 
 /* Bouton danger - Vert doux */
 .btn-danger {
-    background-color: #28a745; /* Vert doux, couleur hospitalière apaisante */
+    background-color: #28a745;
     color: #fff;
 }
 
 .btn-danger:hover {
-    background-color: #218838; /* Vert un peu plus foncé au survol */
+    background-color: #218838;
     transform: scale(1.05);
 }
 

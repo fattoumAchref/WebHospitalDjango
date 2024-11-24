@@ -1,0 +1,130 @@
+/* Global styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fb; /* Couleur claire, calme */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header styles */
+h2 {
+    color: #000000; /* Bleu profond hospitalier */
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Table styles */
+.table {
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: none;
+    margin-top: 30px;
+}
+
+.table thead {
+    background-color: #007bff; /* Bleu de l'entête */
+    color: white;
+    text-align: center;
+    font-weight: bold;
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table td {
+    font-size: 1rem;
+    color: #555;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.table-striped tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+/* Empty state for no data */
+.text-muted {
+    font-size: 1.1rem;
+    color: #999;
+}
+
+/* Button Styles */
+.btn {
+    background-color: #28a745; /* Vert apaisant */
+    color: white;
+    font-size: 1rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #218838; /* Vert foncé au survol */
+    transform: translateY(-3px);
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
+}
+
+/* Card-like effect for each facture row */
+.table tbody tr {
+    border-bottom: 1px solid #ddd;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.table tbody tr:hover {
+    transform: scale(1.02);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    background-color: #f1f1f1; /* Gris clair lors du survol */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .table {
+        font-size: 0.9rem;
+    }
+    h2 {
+        font-size: 2rem;
+    }
+}
+
+/* Style for 'Statut' column */
+.table td:nth-child(4) {
+    font-weight: bold;
+}
+
+.table td:nth-child(4).payee {
+    color: #28a745; /* Vert pour payée */
+}
+
+.table td:nth-child(4).non-payee {
+    color: #dc3545; /* Rouge pour non payée */
+}
+
+/* Style for "Retour à l'accueil" button */
+.btn-primary {
+    background-color: #0066cc; /* Bleu pour retour */
+    color: white;
+    font-size: 1rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+    background-color: #005bb5; /* Bleu foncé au survol */
+    transform: translateY(-3px);
+}

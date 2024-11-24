@@ -129,68 +129,27 @@
 
   <div class="page-section">
     <div class="container">
-      <h1 class="text-center mb-5 wow fadeInUp">Our Doctors</h1>
-
-      <div class="owl-carousel wow fadeInUp" id="doctorSlideshow">
-        <div class="item">
-          <div class="card-doctor">
-            <div class="header">
-              <img src="{% static 'patient/assets/img/doctors/salim.jpg' %}" alt="">
+        <h1 class="text-center mb-5 wow fadeInUp">Our Doctors</h1>
+        <div class="owl-carousel wow fadeInUp" id="doctorSlideshow">
+            {% for doctor in doctors %}
+            <div class="item">
+                <div class="card-doctor">
+                    <div class="header">
+                      <img src="{{ doctor.photo.url }}" alt="Photo de {{ doctor.nom }}" />
+                    </div>
+                    <div class="body">
+                        <p class="text-xl mb-0">{{ doctor.prenom }} {{ doctor.nom }}</p>
+                        <span class="text-sm text-grey">{{ doctor.fonction }}</span>
+                        <p class="text-sm text-grey">{{ doctor.telephone }}</p>
+                        <p class="text-sm text-grey">{{ doctor.email }}</p>
+                    </div>
+                </div>
             </div>
-            <div class="body">
-              <p class="text-xl mb-0">Dr. Mnif Salim</p>
-              <span class="text-sm text-grey">Cardiology</span>
-            </div>
-          </div>
+            {% endfor %}
         </div>
-        <div class="item">
-          <div class="card-doctor">
-            <div class="header">
-              <img src="{% static 'patient/assets/img/doctors/nour.jpg' %}" alt="">
-              
-            </div>
-            <div class="body">
-              <p class="text-xl mb-0">Dr. Mekni Nour</p>
-              <span class="text-sm text-grey">General Health</span>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="card-doctor">
-            <div class="header">
-              <img src="{% static 'patient/assets/img/doctors/fattoum.jpg' %}" alt="">
-            </div>
-            <div class="body">
-              <p class="text-xl mb-0">Dr. Fattoum achref</p>
-              <span class="text-sm text-grey">Dental</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="item">
-          <div class="card-doctor">
-            <div class="header">
-              <img src="{% static 'patient/assets/img/doctors/lina.jpg' %}" alt="">
-            </div>
-            <div class="body">
-              <p class="text-xl mb-0">Dr. Moussa Lina</p>
-              <span class="text-sm text-grey">General Health</span>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="card-doctor">
-            <div class="header">
-              <img src="{% static 'patient/assets/img/doctors/doctor_3.jpg' %}" alt="">
-            </div>
-            <div class="body">
-              <p class="text-xl mb-0">Dr. Diarra Mane</p>
-              <span class="text-sm text-grey">General Health</span>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
+</div>
+
   </div>
   <!--
   <div class="page-section bg-light">
