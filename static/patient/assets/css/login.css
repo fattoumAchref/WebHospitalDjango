@@ -33,7 +33,7 @@ body {
 /* Conteneur du formulaire */
 .form-container {
     border-radius: 12px;
-    border: 0px solid #512da8; /* Mauve */
+    border: 0px solid #20c997; /* Mauve */
     box-shadow: 0 6px 15px rgba(0.5, 0.1, 0.1, 0.3);
     width: 100%;
     max-width: 450px;
@@ -66,7 +66,7 @@ body {
 h1 {
     text-align: center;
     font-size: 28px;
-    color: #512da8; /* Mauve */
+    color: #ffffff; /* Mauve */
     margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -90,7 +90,7 @@ input {
 }
 
 input:focus {
-    border-color: #512da8; /* Mauve */
+    border-color: #20c997; /* Mauve */
     background-color: #f3e5f5;
     box-shadow: 0 0 8px rgba(81, 45, 168, 0.3);
     outline: none;
@@ -104,7 +104,7 @@ input::placeholder {
 /* Effet sur le bouton */
 button {
     padding: 14px 20px;
-    background-color: #512da8; /* Mauve */
+    background-color: #20c997; /* Mauve */
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -115,13 +115,13 @@ button {
 }
 
 button:hover {
-    background-color: #4527a0; /* Mauve foncé */
+    background-color: #20c997; /* Mauve foncé */
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(81, 45, 168, 0.4);
 }
 
 button:active {
-    background-color: #512da8;
+    background-color: #20c997;
     transform: scale(1);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -143,7 +143,7 @@ a {
 
 a:hover {
     text-decoration: underline;
-    color: #512da8; /* Mauve */
+    color: #20c997; /* Mauve */
     transform: scale(1.05);
 }
 
@@ -168,5 +168,5 @@ label {
 }
 
 label:hover {
-    color: #512da8; /* Mauve */
+    color: #20c997; /* Mauve */
 }
