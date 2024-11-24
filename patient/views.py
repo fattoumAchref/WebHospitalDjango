@@ -4,7 +4,7 @@ from .forms import CustomUserCreationForm, CustomAuthenticationForm
 from django.contrib import messages
 from .forms import PatientUpdateForm
 from django.contrib.auth.decorators import login_required
-
+from personnel.models import Personnel
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -35,7 +35,8 @@ def login_view(request):
     return render(request, 'login.html', {'form': form})
 
 def home(request):
-    return render(request, 'index.html')
+    doctors=Personnel.objects.filter(fonction__startswith="Médecin")
+    return render(request, 'index.html',{'doctors':doctors})
 
 def about_us(request):
     return render(request, 'about_us.html')

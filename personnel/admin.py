@@ -16,8 +16,8 @@ class FonctionCategoryFilter(admin.SimpleListFilter):
         # Filtrer les résultats selon la catégorie sélectionnée
         if self.value() == 'medecins':
             return queryset.filter(fonction__in=[
-                'Generaliste', 'Cardiologue', 'Dermatologue', 'Pediatre', 
-                'Chirurgien', 'Radiologue', 'Psychiatre', 'Gynecologue'
+                'Médecin Generaliste', 'Médecin Cardiologue', 'Médecin Dermatologue', 'Médecin Pediatre', 
+                'Médecin Chirurgien', 'Médecin Radiologue', 'Médecin Psychiatre', 'Médecin Gynecologue'
             ])
         if self.value() == 'infirmiers':
             return queryset.filter(fonction='Infirmier')
@@ -28,7 +28,7 @@ class FonctionCategoryFilter(admin.SimpleListFilter):
 
 class PersonnelAdmin(admin.ModelAdmin):
     # Champs à afficher dans la liste
-    list_display = ('prenom', 'nom', 'fonction', 'telephone', 'email', 'adresse')
+    list_display = ('prenom', 'nom', 'fonction', 'telephone', 'email', 'adresse','photo')
 
     # Ajout d'une barre de recherche
     search_fields = ('nom', 'prenom', 'fonction', 'email', 'telephone')
@@ -36,8 +36,9 @@ class PersonnelAdmin(admin.ModelAdmin):
     # Filtres pour simplifier la navigation
     list_filter = (FonctionCategoryFilter,)
 
+
     # Champs à éditer directement dans la liste
-    list_editable = ('fonction', 'telephone', 'adresse')
+    list_editable = ('fonction', 'telephone', 'adresse','photo')
 
     # Pagination pour éviter de surcharger la liste
     list_per_page = 20
@@ -45,7 +46,7 @@ class PersonnelAdmin(admin.ModelAdmin):
     # Organisation des champs dans le formulaire d'ajout/édition
     fieldsets = (
         ('Informations personnelles', {
-            'fields': ('nom', 'prenom', 'fonction', 'telephone', 'email'),
+            'fields': ('nom', 'prenom', 'fonction', 'telephone', 'email','photo'),
         }),
         ('Détails supplémentaires', {
             'fields': ('adresse',),

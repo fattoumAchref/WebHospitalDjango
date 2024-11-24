@@ -8,6 +8,6 @@ class DossierMedical(models.Model):
     description = models.TextField()  # Exemple pour des notes médicales
     date_creation = models.DateTimeField(auto_now_add=True)
     dernier_mise_a_jour = models.DateTimeField(auto_now=True)
-
+    fichier=models.FileField(upload_to='dossiers_medicaux/',null=True,blank=True)
     def __str__(self):
         return f"Dossier médical de {self.patient.username}"
