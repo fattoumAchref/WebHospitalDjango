@@ -21,6 +21,7 @@ from patient import views
 from appointment import views as va
 from facture import views as fa
 from dossiermedical import views as vd
+from facture import views as fa
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
