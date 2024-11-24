@@ -65,11 +65,14 @@ body {
 
 h1 {
     text-align: center;
-    font-size: 24px; /* Réduit la taille du titre */
+    font-size: 28px;
     color: #512da8;
     margin-bottom: 20px;
     text-transform: uppercase;
-    letter-spacing: 1px; /* Réduit l'espacement des lettres */
+    letter-spacing: 2px;
+    font-family: 'Poppins', sans-serif;
+    
+
 }
 
 /* Champs de saisie */

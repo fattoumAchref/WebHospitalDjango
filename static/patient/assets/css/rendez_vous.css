@@ -1,0 +1,185 @@
+/* Arrière-plan avec une couleur douce et un effet de transition */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f9; /* Couleur de fond douce */
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Container central pour la carte avec un fond blanc et une ombre élégante */
+.container {
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.95);
+    width: 100%;
+    max-width: 900px;
+}
+
+/* Style du titre de la carte */
+.card-header h1 {
+    font-size: 2.5rem;
+    color: #6f42c1; /* Mauve pour le titre */
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+/* Styles pour la carte */
+.card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Amélioration du style des labels pour une meilleure lisibilité */
+.form-group label {
+    font-size: 1.1rem;
+    color: #6f42c1; /* Mauve pour les labels */
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Champs de formulaire avec effet de bordure douce */
+.form-control {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 12px;
+    font-size: 1rem;
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Effet focus sur les champs de saisie */
+.form-control:focus {
+    border-color: #6f42c1; /* Mauve pour le focus */
+    box-shadow: 0px 0px 6px rgba(111, 66, 193, 0.5);
+    outline: none;
+}
+
+/* Boutons principaux avec style de transition fluide */
+.btn {
+    border-radius: 50px;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+/* Bouton primaire - Couleur bleue */
+.btn-primary {
+    background-color: #6f42c1; /* Mauve pour le bouton primaire */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #5a2e9a; /* Mauve foncé pour le hover */
+    transform: translateY(-3px);
+}
+
+/* Bouton retour à l'accueil */
+.btn-primary:focus, .btn-primary:active {
+    background-color: #5a2e9a;
+    transform: scale(1.05);
+}
+
+/* Styles pour les animations WOW.js */
+.wow {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+
+/* Animations pour les champs de formulaire */
+.wow.fadeInLeft {
+    animation-name: fadeInLeft;
+}
+
+.wow.fadeInRight {
+    animation-name: fadeInRight;
+}
+
+.wow.fadeInUp {
+    animation-name: fadeInUp;
+}
+
+.wow.zoomIn {
+    animation-name: zoomIn;
+}
+
+/* Définition des animations */
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsive Design pour les écrans plus petits */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .card-header h1 {
+        font-size: 2rem;
+    }
+
+    .form-control {
+        padding: 10px;
+    }
+
+    .btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+}

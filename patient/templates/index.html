@@ -40,10 +40,10 @@
                 <a class="nav-link" href="{% url 'facture_list' %}">Mes Factures</a>
             </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'appointment_list' %}">Appointments</a>
+                    <a class="nav-link" href="{% url 'appointment_list' %}">My Appointments</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'make_appointment' %}">rendez-vous</a>
+                    <a class="nav-link" href="{% url 'make_appointment' %}">Online Appointments</a>
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item">
