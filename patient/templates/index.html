@@ -36,28 +36,27 @@
         
         <div class="collapse navbar-collapse" id="navbarSupport">
             <ul class="navbar-nav ml-auto">
+              {% if user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'facture_list' %}">Mes Factures</a>
+                <a class="nav-link" href="{% url 'facture_list' %}">Invoices</a>
             </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'appointment_list' %}">Appointments</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'make_appointment' %}">rendez-vous</a>
-                </li>
-                {% if user.is_authenticated %}
+                
+                
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'update_patient' %}"><span class="nav-link">Welcome, {{ user.username }}</span></a>
                 </li>
                 <li class="nav-item">
                   <form method="post" action="{% url 'logout' %}" onsubmit="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?');">
                       {% csrf_token %}
-                      <button type="submit" class="btn btn-primary ml-lg-3">Déconnexion</button>
+                      <button type="submit" class="btn btn-primary ml-lg-3">Sign Out</button>
                   </form>
               </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="btn btn-primary ml-lg-3" href="{% url 'login' %}">Connexion</a>
+                        <a class="btn btn-primary ml-lg-3" href="{% url 'login' %}">Sign In</a>
                     </li>
                 {% endif %}
             </ul>

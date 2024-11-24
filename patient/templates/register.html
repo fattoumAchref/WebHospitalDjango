@@ -13,7 +13,7 @@
 <body>
     <div class="main-container">
         <div class="form-container">
-            <h1>Inscription</h1>
+            <h1>Sign Up</h1>
 
             <!-- Boîte de succès -->
             {% if messages %}
@@ -58,11 +58,11 @@
                     {{ form.password2.errors }}
                 </div>
 
-                <button type="submit">S'inscrire</button>
+                <button type="submit">Sign Up</button>
             </form>
 
             <div class="footer">
-                <p>Vous avez déjà un compte ? <a href="{% url 'login' %}">Se connecter</a></p>
+                <p>You already have an account ? <a href="{% url 'login' %}">Sign In</a></p>
             </div>
         </div>
     </div>
