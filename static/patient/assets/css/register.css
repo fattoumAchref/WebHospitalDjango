@@ -33,7 +33,7 @@ body {
 /* Conteneur du formulaire */
 .form-container {
     border-radius: 12px;
-    border: 0px solid #20c997;
+    border: 0px solid #4e5afe;
     box-shadow: 0 6px 15px rgba(0.5, 0.1, 0.1, 0.3);
     width: 90%; /* Diminue la largeur */
     max-width: 400px; /* Largeur maximale ajustée */
@@ -93,7 +93,7 @@ input {
 }
 
 input:focus {
-    border-color: #20c997;
+    border-color: #4e5afe;
     background-color: #f3e5f5;
     box-shadow: 0 0 8px rgba(81, 45, 168, 0.3);
     outline: none;
@@ -107,7 +107,7 @@ input::placeholder {
 /* Effet sur le bouton */
 button {
     padding: 12px 16px; /* Réduit le padding pour le bouton */
-    background-color: #20c997;
+    background-color: #4e5afe;
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -118,13 +118,13 @@ button {
 }
 
 button:hover {
-    background-color: #20c997;
+    background-color: #4e5afe;
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(81, 45, 168, 0.4);
 }
 
 button:active {
-    background-color: #20c997;
+    background-color: #4e5afe;
     transform: scale(1);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -146,7 +146,7 @@ a {
 
 a:hover {
     text-decoration: underline;
-    color: #20c997;
+    color: #4e5afe;
     transform: scale(1.05);
 }
 
@@ -171,5 +171,5 @@ label {
 }
 
 label:hover {
-    color: #20c997;
+    color: #4e5afe;
 }

@@ -1,43 +1,83 @@
-{% load bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-{% load widget_tweaks %}
-{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book an Appointment</title>
+    {% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %} 
+    {% load widget_tweaks %} {% load static %}
 
-<link rel="stylesheet" href="{% static 'patient/assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'patient/assets/css/formulaire.css' %}">
+  </head>
+  <body>
+    <div class="container mt-5">
+      <!-- Card for appointment form -->
+      <div class="card shadow-lg">
+        <div class="card-header">
+          <h1>Update My Profile</h1>
+        </div>
+        <div class="card-body">
+          <form method="post" class="mt-4">
+            {% csrf_token %}
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Modifier mes informations</h2>
+            <div class="row mt-5">
+              <!-- Nom d'utilisateur -->
+              <div class="col-12 col-sm-6 py-2">
+                <label for="id_username">User Name :</label>
+                {{ form.username }}
+              </div>
 
-    <form method="post" class="mt-4">
+              <!-- Email -->
+              <div class="col-12 col-sm-6 py-2">
+                <label for="id_email">Email :</label>
+                {{ form.email }}
+              </div>
+
+              <!-- Numéro de téléphone -->
+              <div class="col-12 col-sm-6 py-2">
+                <label for="id_phone_number">Phone Number :</label>
+                {{ form.phone_number }}
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary mt-3">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <a href="{% url 'home' %}" class="btn btn-secondary mt-3 wow zoomIn"
+        >Back to Home</a
+      >
+
+      <hr class="my-4" />
+
+      <!-- Delete Account Form -->
+      <form
+        method="post"
+        action="{% url 'delete_patient' %}"
+        onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')"
+      >
         {% csrf_token %}
-        <div class="form-group">
-            <label for="id_username">Nom d'utilisateur :</label>
-            {{ form.username|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_email">Email :</label>
-            {{ form.email|add_class:"form-control" }}
-        </div>
-        <div class="form-group">
-            <label for="id_phone_number">Numéro de téléphone :</label>
-            {{ form.phone_number|add_class:"form-control" }}
-        </div>
+        <button type="submit" class="btn btn-danger w-100">
+          Delete my account
+        </button>
+      </form>
+    </div>
 
-        <button type="submit" class="btn btn-primary w-100 mb-3">Enregistrer</button>
-        <a href="{% url 'home' %}" class="btn btn-secondary w-100">Annuler</a>
-    </form>
+    <!-- JavaScript files -->
+    <script src="{% static 'website/assets/js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'website/assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'website/assets/vendor/owl-carousel/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'website/assets/vendor/wow/wow.min.js' %}"></script>
+    <script src="{% static 'website/assets/js/theme.js' %}"></script>
 
-    <hr class="my-4">
-
-    <form method="post" action="{% url 'delete_patient' %}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger w-100">Supprimer mon compte</button>
-    </form>
-</div>
-
-<script src="{% static 'website/assets/js/jquery-3.5.1.min.js' %}"></script>
-<script src="{% static 'website/assets/js/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'website/assets/vendor/owl-carousel/js/owl.carousel.min.js' %}"></script>
-<script src="{% static 'website/assets/vendor/wow/wow.min.js' %}"></script>
-<script src="{% static 'website/assets/js/theme.js' %}"></script>
+    <!-- Initialize WOW.js animations -->
+    <script>
+      new WOW().init();
+    </script>
+  </body>
+</html>

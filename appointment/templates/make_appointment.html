@@ -10,137 +10,7 @@
     {% load widget_tweaks %}
     {% load static %}
 
-    <!-- Ajouter du CSS moderne -->
-    <style>
-        /* Style global */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #eaf1f4; /* Bleu clair pour le fond */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #333;
-        }
-
-        /* Container pour centrer le contenu */
-        .container {
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        /* Carte moderne */
-        .card {
-            background-color: #ffffff; /* Blanc pour la carte */
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .card-header {
-            background-color: #2ecc71; /* Vert pour l'en-tête */
-            color: white;
-            padding: 20px;
-            border-radius: 15px 15px 0 0;
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        /* Formulaire */
-        .form-control {
-            border: 1px solid #ddd;
-            padding: 12px;
-            border-radius: 8px;
-            transition: border-color 0.3s ease;
-            background-color: #fafafa; /* Blanc cassé pour les champs */
-        }
-
-        .form-control:focus {
-            border-color: #2ecc71; /* Bordure verte au focus */
-            box-shadow: 0 0 8px rgba(46, 204, 113, 0.3);
-            background-color: #fff;
-        }
-
-        .form-label {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #555;
-        }
-
-        /* Boutons */
-        .btn {
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 16px;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 1px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background-color: #3498db; /* Bleu pour le bouton principal */
-            color: white;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-            transform: translateY(-3px);
-        }
-
-        .btn-secondary {
-            background-color: #95a5a6; /* Gris pour le bouton secondaire */
-            color: #333;
-            border: none;
-        }
-
-        .btn-secondary:hover {
-            background-color: #7f8c8d;
-            transform: translateY(-3px);
-        }
-
-        /* Style mobile */
-        @media (max-width: 576px) {
-            .container {
-                padding: 20px;
-            }
-
-            .card-header h1 {
-                font-size: 24px;
-            }
-
-            .form-control {
-                padding: 10px;
-            }
-        }
-
-        /* Animations */
-        .card-body {
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'patient/assets/css/formulaire.css' %}">
 </head>
 <body>
     <div class="container mt-5">
@@ -181,12 +51,14 @@
 
                     <!-- Submit Button -->
                     <div class="text-center">
-                        <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Back to Home</a>
+                        
                         <button type="submit" class="btn btn-primary mt-3">Submit Request</button>
                     </div>
                 </form>
             </div>
+            
         </div>
+        <a href="{% url 'home' %}" class="btn btn-secondary mt-3 wow zoomIn">Back to Home</a>
     </div>
 
     <!-- JavaScript files -->

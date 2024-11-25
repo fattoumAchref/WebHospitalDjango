@@ -3,157 +3,22 @@
 {% bootstrap_javascript %}
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'patient/assets/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'patient/assets/css/facture.css' %}">
 <link rel="stylesheet" href="{% static 'patient/assets/css/maicons.css' %}">
 <link rel="stylesheet" href="{% static 'patient/assets/css/bootstrap.css' %}">
 <link rel="stylesheet" href="{% static 'patient/assets/vendor/owl-carousel/css/owl.carousel.css' %}">
 <link rel="stylesheet" href="{% static 'patient/assets/vendor/animate/animate.css' %}">
 <link rel="stylesheet" href="{% static 'patient/assets/css/theme.css' %}">
 
-<style>
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f4f7f6;
-        margin: 0;
-        padding: 0;
-    }
-
-    .table-container {
-        margin-top: 30px;
-        padding: 30px;
-        background-color: #fff;
-        border-radius: 15px;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
-
-    h2 {
-        color: #2d3e50;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 25px;
-    }
-
-    .table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 10px;
-        margin-bottom: 30px;
-    }
-
-    .table th,
-    .table td {
-        padding: 15px;
-        text-align: center;
-        border: 1px solid #ddd;
-        background-color: #ffffff;
-        font-size: 14px;
-        border-radius: 8px;
-    }
-
-    .table thead {
-        background: linear-gradient(135deg, #007bff, #0056b3); /* Nouveau dégradé bleu */
-        color: white;
-        font-weight: bold;
-        text-transform: uppercase;
-        border-radius: 10px;
-    }
-
-    .table tbody tr {
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-
-    .table tbody tr:hover {
-        background-color: #e1f5e1; /* Vert pâle */
-        cursor: pointer;
-        transform: scale(1.03);
-        transition: all 0.3s;
-    }
-
-    .table .btn {
-        padding: 10px 20px;
-        font-size: 14px;
-        border-radius: 20px;
-        transition: all 0.3s;
-        text-transform: uppercase;
-    }
-
-    .table .btn-primary {
-        background-color: #007bff; /* Bleu */
-        border: none;
-        color: white;
-    }
-
-    .table .btn-primary:hover {
-        background-color: #0056b3; /* Bleu plus foncé */
-        transform: translateY(-3px);
-    }
-
-    .table .btn-danger {
-        background-color: #dc3545; /* Rouge */
-        border: none;
-        color: white;
-    }
-
-    .table .btn-danger:hover {
-        background-color: #c82333; /* Rouge foncé */
-        transform: translateY(-3px);
-    }
-
-    .table .btn-secondary {
-        background-color: #28a745; /* Vert */
-        color: white;
-        border-radius: 20px;
-    }
-
-    .table .btn-secondary:hover {
-        background-color: #218838; /* Vert foncé */
-        transform: translateY(-3px);
-    }
-
-    .text-muted {
-        color: #6c757d;
-    }
-
-    .text-center {
-        text-align: center;
-    }
-
-    .btn-secondary {
-        background-color: #007bff; /* Bleu */
-        color: white;
-        border-radius: 5px;
-    }
-
-    .btn-secondary:hover {
-        background-color: #0056b3; /* Bleu foncé */
-    }
-
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    .form-control {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-</style>
 
 <div class="container mt-5 table-container">
-    <h2 class="text-center mb-4">Vos rendez-vous</h2>
+    <h2 class="text-center mb-4">My Appointments</h2>
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
             <tr>
-                <th>Docteur</th>
+                <th>Doctor</th>
                 <th>Date</th>
-                <th>Heure</th>
+                <th>Hour</th>
                 <th>Description</th>
                 <th>Action</th>
             </tr>
@@ -167,13 +32,13 @@
                     <td>{{ appointment.description }}</td>
                     <td>
                         <!-- Bouton de modification -->
-                        <a href="{% url 'update_appointment' appointment.id %}" class="btn btn-primary mt-3 wow zoomIn">Modifier</a>
+                        <a href="{% url 'update_appointment' appointment.id %}" class="btn btn-primary mt-3 wow zoomIn">Update</a>
                         
                         <!-- Formulaire de suppression -->
                         <form action="{% url 'delete_appointment' appointment.id %}" method="post" style="display: inline;">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger mt-3 wow zoomIn" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce rendez-vous ?');">
-                                Supprimer
+                            <button type="submit" class="btn btn-danger mt-3 wow zoomIn" onclick="return confirm('Are you sure you want to cancel this appointment ?');">
+                                Cancel
                             </button>
                         </form>
                     </td>
@@ -181,13 +46,13 @@
             {% empty %}
                 <tr>
                     <td colspan="5" class="text-center text-muted">
-                        Aucun rendez-vous trouvé.
+                        No appointment found.
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'home' %}" class="btn btn-secondary mt-3 wow zoomIn">Retour à l'accueil</a>
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-3 wow zoomIn">Back to home</a>
 </div>
 
 <script src="{% static 'website/assets/js/jquery-3.5.1.min.js' %}"></script>
