@@ -266,6 +266,7 @@ a.text-dark:hover, a.text-dark:focus {
   color: #fff;
   background-color: #05B4E1;
   border-color: transparent;
+  
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
