@@ -279,7 +279,7 @@
                                 <td>{{ patient.age }}</td>
                                 <td class="{{ patient.status|lower }}">{{ patient.status }}</td>
                                 <td>
-                                    <a href="{% url 'admin:dossier_medical' patient.id %}" class="add"> Dossier medical pour {{ patient.username }} </a>
+                                    <a href="{% url 'admin:export_pdf_dossier_medical' patient.id %}" class="add"> Dossier medical pour {{ patient.username }} </a>
                                 </td>
                                 <td>
                                     <a href="{% url 'admin:edit_patient' patient.id %}">
