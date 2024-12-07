@@ -1,0 +1,57 @@
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'patient/assets/css/facture.css' %}">
+<link rel="stylesheet" href="{% static 'patient/assets/css/maicons.css' %}">
+<link rel="stylesheet" href="{% static 'patient/assets/css/bootstrap.css' %}">
+<link rel="stylesheet" href="{% static 'patient/assets/vendor/owl-carousel/css/owl.carousel.css' %}">
+<link rel="stylesheet" href="{% static 'patient/assets/vendor/animate/animate.css' %}">
+<link rel="stylesheet" href="{% static 'patient/assets/css/theme.css' %}">
+
+
+<div class="container mt-5 table-container">
+    <h2 class="text-center mb-4">Appointments</h2>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Hour</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.personnel }}</td>
+                    <td>{{ appointment.date }}</td>
+                    <td>{{ appointment.time }}</td>
+                    <td>{{ appointment.description }}</td>
+                    <td> <a href="{% url 'admin:edit_appointment' appointment.id %}" class="btn btn-secondary mt-3 wow zoomIn">Update</a>
+                    <form action="{% url 'admin:delete_appointment' appointment.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger mt-3 wow zoomIn" onclick="return confirm('Are you sure you want to cancel this appointment ?');">
+                            Cancel
+                        </button>
+                    </form></td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">
+                        No appointment found.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'admin:index' %}" class="btn btn-secondary mt-3 wow zoomIn">Back to dashboard</a>
+</div>
+
+<script src="{% static 'website/assets/js/jquery-3.5.1.min.js' %}"></script>
+<script src="{% static 'website/assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'website/assets/vendor/owl-carousel/js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'website/assets/vendor/wow/wow.min.js' %}"></script>
+<script src="{% static 'website/assets/js/theme.js' %}"></script>

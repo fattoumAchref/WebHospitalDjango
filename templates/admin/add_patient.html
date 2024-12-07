@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Patient</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load widget_tweaks %}
+    <link rel="stylesheet" href="{% static 'patient/assets/css/formulaire.css' %}">
+
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Card for adding a doctor form -->
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h1>Add Patient</h1>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="row mt-3">
+                        <!-- Username -->
+                        <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.nom.id_for_label }}" class="form-label">Username:</label>
+                            {{ form.username }}  
+                        </div>
+
+                        <!-- First Name -->
+                        <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.nom.id_for_label }}" class="form-label">First Name:</label>
+                            {{ form.first_name }} 
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.prenom.id_for_label }}" class="form-label">Last Name:</label>
+                            {{ form.last_name }}
+                        </div>
+
+                        
+                        <!-- Email -->
+                        <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">Email:</label>
+                            {{ form.email }}
+                        </div>
+
+                        <!-- Status -->
+                        <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.fonction.id_for_label }}" class="form-label">Status:</label>
+                            {{ form.status }}
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.telephone.id_for_label }}" class="form-label">Phone Number:</label>
+                            {{ form.phone_number }}
+                        </div>
+
+
+                        <!-- Age -->
+                        <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.adresse.id_for_label }}" class="form-label">Age:</label>
+                            {{ form.age }}
+                        </div>
+
+                         <!-- date_joined -->
+                         <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.photo.id_for_label }}" class="form-label">Date Joined:</label>
+                            {{ form.date_joined }}
+                        </div>
+                        
+                        <!-- is_staff -->
+                        <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.photo.id_for_label }}" class="form-label">Staff status:</label>
+                            {{ form.is_staff }}
+                        </div>
+
+                        <!-- is_active -->
+                        <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.photo.id_for_label }}" class="form-label">Active:</label>
+                            {{ form.is_active }}
+                        </div>
+
+                       
+
+                        <!-- Submit Button -->
+                        <div class="col-12 text-center mt-3">
+                            <button type="submit" class="btn btn-primary">Add Patient</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <a href="{% url 'admin:index' %}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    </div>
+
+    <!-- JavaScript files -->
+    <script src="{% static 'website/assets/js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'website/assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'website/assets/vendor/owl-carousel/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'website/assets/vendor/wow/wow.min.js' %}"></script>
+    <script src="{% static 'website/assets/js/theme.js' %}"></script>
+    
+</body>
+</html>

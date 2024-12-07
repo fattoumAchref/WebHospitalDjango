@@ -4,7 +4,7 @@ from .models import CustomUser
 
 class CustomUserAdmin(UserAdmin):
     # Champs à afficher dans la liste des utilisateurs
-    list_display = ('username', 'email', 'first_name', 'last_name', 'phone_number', 'is_active')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'phone_number', 'is_active','gender','age','status')
 
     # Champs pour la recherche
     search_fields = ('username', 'email', 'first_name', 'last_name', 'phone_number')
@@ -38,6 +38,11 @@ class CustomUserAdmin(UserAdmin):
 
     # Pagination dans la liste des utilisateurs
     list_per_page = 20
+    
+    class Media:
+        css = {
+            'all': ('admin.css',)  # Add your custom CSS here
+        }
 
 # Enregistrer le modèle dans l’administration avec la configuration personnalisée
 admin.site.register(CustomUser, CustomUserAdmin)

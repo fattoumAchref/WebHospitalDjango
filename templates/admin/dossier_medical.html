@@ -1,0 +1,25 @@
+<h1>Dossier médical pour {{ patient.first_name }} {{ patient.last_name }}</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Date de création</th>
+            <th>Dernière mise à jour</th>
+            <th>Fichier</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dossier in dossiers %}
+        <tr>
+            <td>{{ dossier.description }}</td>
+            <td>{{ dossier.date_creation|date:"d/m/Y" }}</td>
+            <td>{{ dossier.dernier_mise_a_jour|date:"d/m/Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">Aucun dossier médical disponible.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

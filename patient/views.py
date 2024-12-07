@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
@@ -5,6 +6,8 @@ from django.contrib import messages
 from .forms import PatientUpdateForm
 from django.contrib.auth.decorators import login_required
 from personnel.models import Personnel
+from django.contrib.admin.views.decorators import staff_member_required
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -24,7 +27,6 @@ def login_view(request):
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
-                messages.success(request, f'Bienvenue ! Vous êtes maintenant connecté.')
                 return redirect('home')
             else:
                 messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
@@ -51,7 +53,7 @@ def update_patient(request):
         form = PatientUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, "Vos informations ont été mises à jour avec succès.")
+            messages.success(request, "Vos informations ont étées mises à jour avec succès.")
             return redirect('update_patient')
     else:
         form = PatientUpdateForm(instance=request.user)
@@ -66,3 +68,7 @@ def delete_patient(request):
         
         return redirect('home')
     return render(request, 'delete_patient.html')
+
+@staff_member_required
+def custom_dashboard(request):
+    return HttpResponse("<h1>Welcome to the Custom Dashboard</h1>")

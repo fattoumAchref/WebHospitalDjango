@@ -1,0 +1,331 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="{% static 'admin.css' %}"  rel="stylesheet" >
+    <title>Dashboard</title>
+</head>
+<body>    
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+   {% endif %}
+    <section class="header">
+        <div class="logo">
+            <a>
+                <div class="menu"><i class="ri-menu-line icon icon-0 menu"></i></div>
+                <a class="navbar-brand" href="/"><span class="text-primary">Hospital</span>-Plus
+            </a>
+        </div>
+        <div class="search--notification--profile">
+            <div class="search">
+                <input type="text" placeholder="Search Scdule..">
+                <button><i class="ri-search-2-line"></i></button>
+            </div>
+            
+            <div class="notification--profile">
+                <!--
+                <div class="picon lock">
+                    <i class="ri-lock-line"></i>
+                </div>
+                <div class="picon bell">
+                    <i class="ri-notification-2-line"></i>
+                </div>
+                <div class="picon chat">
+                    <i class="ri-wechat-2-line"></i>
+                </div>
+                -->
+                
+                <div>
+                   <a style="margin-left: 10px;"> <span class="nav-link"><b>Welcome, {{ user.username }}</b></span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="main">
+        <div class="sidebar">
+            <ul class="sidebar--items">
+                <li>
+                    <a href="#" id="active--link">
+                        <span class="icon icon-1"><i class="ri-layout-grid-line"></i></span>
+                        <span class="sidebar--item">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'admin:all_appointments_list'%}" id="appointments">
+                        <span class="icon icon-2"><i class="ri-customer-service-line"></i></span>
+                        <span class="sidebar--item">Appointments</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="{% url 'admin:all_patients_list'%}" id="patients">
+                        <span class="icon icon-4"><i class="ri-user-line"></i></span>
+                        <span class="sidebar--item">Patients</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon icon-5"><i class="ri-line-chart-line"></i></span>
+                        <span class="sidebar--item">Activity</span>
+                    </a>
+                </li>
+                <!--
+                <li>
+                    <a href="#">
+                        <span class="icon icon-3"><i class="ri-user-2-line"></i></span>
+                        <span class="sidebar--item" style="white-space: nowrap;">Reliable Doctor</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon icon-6"><i class="ri-customer-service-line"></i></span>
+                        <span class="sidebar--item">Support</span>
+                    </a>
+                </li>
+                -->
+                
+            </ul>
+            <ul class="sidebar--bottom-items">
+                <!--
+                 <li>
+                    <a href="#">
+                        <span class="icon icon-7"><i class="ri-settings-3-line"></i></span>
+                        <span class="sidebar--item">Settings</span>
+                    </a>
+                </li>
+                -->
+                <li>
+                    <a href="{% url 'logout' %}"
+                    onclick="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?');">
+                        <span class="icon icon-8"><i class="ri-logout-box-r-line"></i></span>
+                        <span class="sidebar--item">Logout</span>
+                    </a>
+                </li>                
+            </ul>
+        </div>
+        <div class="main--content">
+            <div class="overview">
+                <div class="title">
+                    <h2 class="section--title">Overview</h2>
+                    <!--<select name="date" id="date" class="dropdown">
+                        <option value="today">Today</option>
+                        <option value="lastweek">Last Week</option>
+                        <option value="lastmonth">Last Month</option>
+                        <option value="lastyear">Last Year</option>
+                        <option value="alltime">All Time</option>
+                    </select>-->
+                    
+                </div>
+                <div class="cards">
+                    <div class="card card-1">
+                        <div class="card--data">
+                            <div class="card--content">
+                                <h5 class="card--title">Total Doctors</h5>
+                                <h1>{{ total_doctors }}</h1>
+                            </div>
+                            <i class="ri-user-2-line card--icon--lg"></i>
+                        </div>
+                        <div class="card--stats">
+                            <span><i class="ri-bar-chart-fill card--icon stat--icon"></i>{{ doctor_percentage_change }}%</span>
+                            <span><i class="ri-arrow-up-s-fill card--icon up--arrow"></i>{{doctor_increase}}</span>
+                            <span><i class="ri-arrow-down-s-fill card--icon down--arrow"></i>{{ doctor_decrease }}</span>
+                        </div>
+                    </div>
+                    <div class="card card-2">
+                        <div class="card--data">
+                            <div class="card--content">
+                                <h5 class="card--title">Total Patients</h5>
+                                <h1>{{ total_patients }}</h1>
+                            </div>
+                            <i class="ri-user-line card--icon--lg"></i>
+                        </div>
+                        <div class="card--stats">
+                         
+                            <span><i class="ri-bar-chart-fill card--icon stat--icon"></i>{{ patient_percentage_change }}%</span>
+                            <span><i class="ri-arrow-up-s-fill card--icon up--arrow"></i>{{ patient_increase }}</span>
+                            <span><i class="ri-arrow-down-s-fill card--icon down--arrow"></i>{{ patient_decrease }}</span>
+                        </div>
+                    </div>
+                    <div class="card card-3">
+                        <div class="card--data">
+                            <div class="card--content">
+                                <h5 class="card--title">Appointments</h5>
+                                <h1>{{ total_appointments }}</h1>
+                            </div>
+                            <i class="ri-calendar-2-line card--icon--lg"></i>
+                        </div>
+                        <div class="card--stats">
+                            <span><i class="ri-bar-chart-fill card--icon stat--icon"></i>{{appointment_percentage_change}}%</span>
+                            <span><i class="ri-arrow-up-s-fill card--icon up--arrow"></i>{{appointment_increase}}</span>
+                            <span><i class="ri-arrow-down-s-fill card--icon down--arrow"></i>{{appointment_decrease}}</span>
+                        </div>
+                    </div>
+                    <div class="card card-4">
+                        <div class="card--data">
+                            <div class="card--content">
+                                <h5 class="card--title">Emergency cases</h5>
+                                <h1>{{emergency_cases}}</h1>
+                            </div>
+                            <i class="ri-hotel-bed-line card--icon--lg"></i>
+                        </div>
+                        <div class="card--stats">
+                            <span><i class="ri-bar-chart-fill card--icon stat--icon"></i>{{emergency_case_percentage_change}}%</span>
+                            <span><i class="ri-arrow-up-s-fill card--icon up--arrow"></i>{{emergency_case_increase}}</span>
+                            <span><i class="ri-arrow-down-s-fill card--icon down--arrow"></i>{{emergency_case_decrease}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="doctors">
+                <div class="title">
+                    <h2 class="section--title">Doctors</h2>
+                    <div class="doctors--right--btns">
+                        <form method="get" id="doctorFilterForm">
+                            <select name="fonction" id="fonction" class="dropdown doctor--filter" onchange="document.getElementById('doctorFilterForm').submit();">
+                                <option value="">All</option>
+                                <option value="Médecin généraliste" {% if selected_fonction == "Médecin généraliste" %}selected{% endif %}>Médecin généraliste</option>
+                                <option value="Médecin Cardiologue" {% if selected_fonction == "Médecin Cardiologue" %}selected{% endif %}>Médecin Cardiologue</option>
+                                <option value="Médecin Dermatologue" {% if selected_fonction == "Médecin Dermatologue" %}selected{% endif %}>Médecin Dermatologue</option>
+                                <option value="Médecin Pédiatre" {% if selected_fonction == "Médecin Pédiatre" %}selected{% endif %}>Médecin Pédiatre</option>
+                                <option value="Médecin Chirurgien" {% if selected_fonction == "Médecin Chirurgien" %}selected{% endif %}>Médecin Chirurgien</option>
+                                <option value="Médecin Radiologue" {% if selected_fonction == "Médecin Radiologue" %}selected{% endif %}>Médecin Radiologue</option>
+                                <option value="Médecin Psychiatre" {% if selected_fonction == "Médecin Psychiatre" %}selected{% endif %}>Médecin Psychiatre</option>
+                                <option value="Médecin Gynécologue" {% if selected_fonction == "Médecin Gynécologue" %}selected{% endif %}>Médecin Gynécologue</option>
+                            </select>
+                        </form>
+                        <button class="add">
+                            <a href="{% url 'admin:add_doctor' %}" class="add">
+                                <i class="ri-add-line"></i>
+                                Add Doctor
+                            </a>
+                        </button>
+                    </div>
+                </div>
+                <div class="doctors--cards">
+                    {% for doctor in doctors %}
+                    <div class="lina">
+                        <div class="doctor--card">
+                            <a href="#" class="doctor--details">
+                                <div class="img--box--cover">
+                                    <div class="img--box">
+                                        <img src="{{ doctor.photo.url }}" alt="{{ doctor.nom }}">
+                                    </div>
+                                </div>
+                                <p class="{% if doctor.fonction == 'Médecin Generaliste' %}free{% else %}scheduled{% endif %}">
+                                    {{ doctor.fonction }}
+                                </p>
+                            </a>
+                        </div>
+                        <div class="doctor-actions">
+                            <a href="{% url 'admin:edit_doctor' doctor.id %}" class="edit-button" style="color: #70d7a5; cursor: pointer;">
+                                <i class="ri-edit-line"></i>
+                            </a>
+                            <form method="post" action="">
+                                {% csrf_token %}
+                                <button 
+                                    type="submit" 
+                                    name="delete_doctor" 
+                                    value="{{ doctor.id }}" 
+                                    style="background: none; border: none; cursor: pointer;" 
+                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce docteur ? Cette action est irréversible.');">
+                                    <i class="ri-delete-bin-line delete"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>                
+            </div>
+            
+            <div class="recent--patients">
+                <div class="title">
+                    <h2 class="section--title">Recent Patients</h2>
+                    <button class="add">
+                        <a href="{% url 'admin:add_patient' %}" class="add">
+                        <i class="ri-add-line"></i>
+                        Add Patient
+                    </a></button>
+                </div>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date in</th>
+                                <th>Gender</th>
+                                <th>Age</th>
+                                <th>Status</th>
+                                <th>Dossier Medical</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for patient in patients %}
+                            <tr>
+                                <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+                                <td>{{ patient.date_joined|date:"d/m/Y" }}</td>
+                                <td>{{ patient.gender }}</td>
+                                <td>{{ patient.age }}</td>
+                                <td class="{{ patient.status|lower }}">{{ patient.status }}</td>
+                                <td>
+                                    <a href="{% url 'admin:dossier_medical' patient.id %}" class="add"> Dossier medical pour {{ patient.username }} </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'admin:edit_patient' patient.id %}">
+                                        <i class="ri-edit-line edit"></i>
+                                    </a>
+                                </td>                                
+                                <td>
+                                    <form method="post" action="">
+                                        {% csrf_token %}
+                                        <button 
+                                          type="submit" 
+                                          name="delete_patient" 
+                                          value="{{ patient.id }}" 
+                                          style="background: none; border: none; cursor: pointer;" 
+                                          onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce patient ? Cette action est irréversible.');">
+                                          <i class="ri-delete-bin-line delete" style="color: red; cursor: pointer;"></i>
+                                        </button>                                    
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6">No patients found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <button style="background-color: #70d7a5;
+                    color: #fff;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    outline: none;
+                    border: none;
+                    align-items: center;
+                    padding: 5px 10px;">
+                    <a href="{% url 'admin:export-patients-csv' %}" style="text-decoration: none; color: white;">
+                        Export to CSV
+                    </a>
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    <script src="{% static 'main.js' %}"></script>
+</body>
+</html>
