@@ -40,11 +40,11 @@ class CustomAuthenticationForm(AuthenticationForm):
         
 
 class PatientUpdateForm(UserChangeForm):
-    password = None  # Supprime le champ du mot de passe
+    password = None
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'phone_number']  # Adaptez les champs à votre modèle
+        fields = ['username', 'email', 'phone_number']  
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),

@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import SetPasswordForm
@@ -16,6 +17,9 @@ from patient.models import CustomUser  # Import de ton modèle personnalisé
 
 
 # Inscription
+
+from django.contrib.admin.views.decorators import staff_member_required
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -36,7 +40,6 @@ def login_view(request):
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
-                messages.success(request, f'Bienvenue ! Vous êtes maintenant connecté.')
                 return redirect('home')
             else:
                 messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
@@ -58,7 +61,7 @@ def update_patient(request):
         form = PatientUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, "Vos informations ont été mises à jour avec succès.")
+            messages.success(request, "Vos informations ont étées mises à jour avec succès.")
             return redirect('update_patient')
     else:
         form = PatientUpdateForm(instance=request.user)
@@ -132,3 +135,6 @@ def reset_password(request, uidb64, token):
             return HttpResponse('Le lien est invalide ou a expiré.', status=400)
     except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
         return HttpResponse('Lien invalide.', status=400)
+@staff_member_required
+def custom_dashboard(request):
+    return HttpResponse("<h1>Welcome to the Custom Dashboard</h1>")

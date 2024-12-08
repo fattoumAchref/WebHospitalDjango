@@ -62,7 +62,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            
+            os.path.join(BASE_DIR, 'templates')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -153,3 +153,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] ="api-cloud-444017-a0c165b464c8.json"
+
+LOGIN_URL = '/admin/login/'
