@@ -47,6 +47,11 @@ urlpatterns = [
     path('appointment/<int:appointment_id>/delete/', va.delete_appointment, name='delete_appointment'),
     path('update/', views.update_patient, name='update_patient'),
     path('facture/pdf/<int:facture_id>/', fa.generate_pdf, name='generate_pdf'),
+    path('forgot-password/', views.forgot_password, name='forgot_password'),
+    path('reset-password/<uidb64>/<token>/', views.reset_password, name='reset_password'),
+
+
+
     path('admin/custom-dashboard/', custom_dashboard, name='custom_dashboard'),  # Custom dashboard URL
 
     ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
