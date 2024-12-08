@@ -46,9 +46,7 @@ urlpatterns = [
     path('facture/', fa.facture_list, name='facture_list'),
     path('appointment/<int:appointment_id>/delete/', va.delete_appointment, name='delete_appointment'),
     path('update/', views.update_patient, name='update_patient'),
-    path('delete/', views.delete_patient, name='delete_patient'),
     path('facture/pdf/<int:facture_id>/', fa.generate_pdf, name='generate_pdf'),
     path('admin/custom-dashboard/', custom_dashboard, name='custom_dashboard'),  # Custom dashboard URL
-    path('delete-patient/', views.delete_patient, name='delete_patient'),
 
     ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
