@@ -28,7 +28,7 @@
         <tbody>
             {% for patient in patients %}
             <tr>
-                <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+                <td>{{ patient.username }}</td>
                 <td>{{ patient.date_joined|date:"d/m/Y" }}</td>
                 <td>{{ patient.gender }}</td>
                 <td>{{ patient.age }}</td>
@@ -38,7 +38,7 @@
                 </td>
                 <td>
                     <a href="{% url 'admin:edit_patient' patient.id %}" class="btn btn-secondary mt-3 wow zoomIn">Update</a>
-                    <form method="post" action="" style="display: inline;">
+                    <form method="post" action="{% url 'admin:delete_patient' patient.id %}" style="display: inline;">
                         {% csrf_token %}
                         <button type="submit" name="delete_patient" value="{{ patient.id }}"
                             class="btn btn-danger mt-3 wow zoomIne"
