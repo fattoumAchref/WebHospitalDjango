@@ -23,6 +23,10 @@
                     {% csrf_token %}
 
                     <div class="row mt-3">
+                        <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label">Username:</label>
+                            {{ form.username }}
+                        </div>
                         <!-- First Name -->
                         <div class="col-12 col-sm-6 py-2">
                             <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name:</label>
@@ -77,17 +81,18 @@
                             {{ form.is_active }}
                         </div>
 
-                        <!-- Submit Button -->
+                         <!-- Submit Button -->
                         <div class="col-12 text-center mt-3">
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="submit" class="btn btn-primary">Edit Patient</button>
                         </div>
+                        
                     </div>
                 </form>
             </div>
         </div>
-
         <!-- Back Button -->
-        <a href="{% url 'admin:index' %}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+        <a href="{% url 'admin:index' %}" class="btn btn-secondary mt-3">Save changes</a>
+
     </div>
 
     <!-- JavaScript files -->

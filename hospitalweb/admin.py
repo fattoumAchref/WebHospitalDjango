@@ -69,7 +69,8 @@ def get_patient_percentage_change():
     ).count()
     active_patients = get_total_patients()
     if active_patients_last_month > 0:
-        return ((active_patients - active_patients_last_month) / active_patients_last_month) * 100
+        percentage_change = ((active_patients - active_patients_last_month) / active_patients_last_month) * 100
+        return int(percentage_change)
     return 0
 
 def get_patient_increase():
@@ -137,8 +138,14 @@ class DoctorForm(forms.ModelForm):
         model = Personnel
         fields = ['nom', 'prenom', 'fonction', 'telephone', 'email', 'adresse', 'photo']
         widgets = {
-            'fonction': forms.Select(choices=Personnel.FONCTION_CHOICES),
+            'fonction': forms.Select(attrs={'class': 'form-control'},choices=Personnel.FONCTION_CHOICES),
+            'nom': forms.TextInput(attrs={'class': 'form-control'}),
+            'prenom': forms.TextInput(attrs={'class': 'form-control'}),
+            'telephone': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.TextInput(attrs={'class': 'form-control'}),
+            'adresse': forms.TextInput(attrs={'class': 'form-control'}),
         }
+        
 class PatientForm(forms.ModelForm):
     class Meta:
         model = CustomUser
@@ -151,6 +158,7 @@ class PatientForm(forms.ModelForm):
             'email' : forms.TextInput(attrs={'class': 'form-control'}),
             'phone_number' : forms.TextInput(attrs={'class': 'form-control'}),
         }
+
 class AppointmentForm(forms.ModelForm):
     personnel = forms.ModelChoiceField(
         queryset=Personnel.objects.all(),
@@ -198,8 +206,10 @@ class CustomAdminSite(admin.AdminSite):
           patient_id = request.POST.get("delete_patient")
           try:
             patient = get_object_or_404(CustomUser, id=patient_id)
+            patient_name = f"{patient.first_name} {patient.last_name}" if patient.first_name and patient.last_name else "Unknown"
             mark_patient_as_left(patient_id)
             patient.delete()
+            messages.success(request, f"Patient {patient_name} deleted successfully!")
           except Exception as e:
             messages.error(request, f"An error occurred while deleting the patient: {str(e)}")
         
@@ -217,7 +227,7 @@ class CustomAdminSite(admin.AdminSite):
         patients = CustomUser.objects.all()
         extra_context['patients'] = patients
 
-        selected_fonction = request.GET.get('fonction', None)
+        selected_fonction = request.GET.get('fonction', '')
 
         if selected_fonction:
           doctors = Personnel.objects.filter(fonction=selected_fonction)
@@ -278,19 +288,16 @@ class CustomAdminSite(admin.AdminSite):
         print(form) 
         return render(request, 'admin/add_patient.html', {'form': form})
     
-    def edit_patient_view(self, request, patient_id):
+    def edit_patient(self, request, patient_id):
         patient = get_object_or_404(CustomUser, id=patient_id)
         if request.method == 'POST':
-            # If the form is submitted, update the patient data
-            form = PatientForm(request.POST, instance=patient)
+            form = PatientForm(request.POST, request.FILES, instance=patient)
             if form.is_valid():
                 form.save()
-                return redirect('admin:index')
+                return redirect('/admin') 
         else:
-            # If GET request, pre-populate the form with the patient's existing data
             form = PatientForm(instance=patient)
-
-        return render(request, 'admin/edit_patient.html', {'form': form, 'patient': patient})
+        return render(request, 'admin/edit_patient.html', {'form': form,'patient':patient})
     
     def edit_doctor(self, request, doctor_id):
        doctor = get_object_or_404(Personnel, id=doctor_id)
@@ -306,6 +313,11 @@ class CustomAdminSite(admin.AdminSite):
     def delete_doctor(self,request, doctor_id):
       doctor = get_object_or_404(Personnel, id=doctor_id)
       doctor.delete()
+      return redirect('admin:index')
+    
+    def delete_patient(self,request, patient_id):
+      patient = get_object_or_404(CustomUser, id=patient_id)
+      patient.delete()
       return redirect('admin:index')
      
     def view_appointments(self, request):
@@ -324,7 +336,7 @@ class CustomAdminSite(admin.AdminSite):
            form = AppointmentForm(request.POST, instance=appointment)
            if form.is_valid():
                form.save()
-               return redirect('/admin/appointments')  # Redirect to the appointments list
+               return redirect('/admin/appointments') 
        else:
            form = AppointmentForm(instance=appointment)
 
@@ -373,9 +385,10 @@ class CustomAdminSite(admin.AdminSite):
         path('add-doctor/', self.admin_view(self.add_doctor_view), name='add_doctor'),
         path('add-patient/', self.admin_view(self.add_patient_view), name='add_patient'),
         path('dossier-medical/<int:patient_id>/pdf/', self.admin_view(self.export_pdf_dossier_medical), name='export_pdf_dossier_medical'),
-        path('edit-patient/<int:patient_id>/', self.admin_view(self.edit_patient_view), name='edit_patient'),
+        path('edit-patient/<int:patient_id>/', self.admin_view(self.edit_patient), name='edit_patient'),
         path('doctor/edit/<int:doctor_id>/', self.admin_view(self.edit_doctor), name='edit_doctor'),
         path('doctor/delete/<int:doctor_id>/', self.admin_view(self.delete_doctor), name='delete_doctor'),
+        path('patient/delete/<int:patient_id>/', self.admin_view(self.delete_patient), name='delete_patient'),
         path('appointments/', self.view_appointments, name='all_appointments_list'),
         path('patients/', self.view_patients, name='all_patients_list'),
         path('appointment/edit/<int:appointment_id>/', self.admin_view(self.edit_appointment), name='edit_appointment'),
