@@ -50,3 +50,6 @@ class PatientUpdateForm(UserChangeForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
         }
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(label="Adresse email", required=True)
+
