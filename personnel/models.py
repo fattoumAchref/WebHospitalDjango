@@ -5,16 +5,16 @@ class Personnel(models.Model):
     nom = models.CharField(max_length=100)
     prenom = models.CharField(max_length=100)
     FONCTION_CHOICES = [
-        ('Médecin Generaliste', 'Médecin Généraliste'),
+        ('Médecin Généraliste', 'Médecin Généraliste'),
         ('Médecin Cardiologue', 'Médecin Cardiologue'),
         ('Médecin Dermatologue', 'Médecin Dermatologue'),
-        ('Médecin Pediatre', 'Médecin Pédiatre'),
+        ('Médecin Pédiatre', 'Médecin Pédiatre'),
         ('Médecin Chirurgien', 'Médecin Chirurgien'),
         ('Médecin Radiologue', 'Médecin Radiologue'),
         ('Médecin Psychiatre', 'Médecin Psychiatre'),
-        ('Médecin Gynecologue', 'Médecin Gynécologue'),
+        ('Médecin Gynécologue', 'Médecin Gynécologue'),
         ('Infirmier', 'Infirmier'),
-        ('Secretaire', 'Secrétaire'),
+        ('Secrétaire', 'Secrétaire'),
         ('Technicien', 'Technicien'),
     ]
     fonction = models.CharField(max_length=100, choices=FONCTION_CHOICES)

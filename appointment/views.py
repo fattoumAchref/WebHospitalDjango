@@ -26,11 +26,22 @@ def make_appointment(request):
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
+            # Sauvegarder le rendez-vous
             appointment = form.save(commit=False)
-            appointment.patient = request.user  # Link to the logged-in patient
+            appointment.patient = request.user  # Lier le rendez-vous à l'utilisateur connecté (patient)
             appointment.save()
+
+            # Envoi de l'e-mail de confirmation
+            subject = 'Confirmation de votre rendez-vous'
+            message = f'Bonjour {request.user.first_name},\n\nVotre rendez-vous a été pris avec succès pour le {appointment.date}.'
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [request.user.email]  # L'email du patient qui a pris rendez-vous
+
+            send_mail(subject, message, from_email, recipient_list)
+
+            # Message de succès
             messages.success(request, "Votre rendez-vous a été pris avec succès.")
-            return redirect('home')
+            return redirect('home')  # Ou redirigez où tu veux après succès
         else:
             messages.error(request, "Erreur lors de la prise de rendez-vous. Veuillez réessayer.")
     else:
@@ -46,9 +57,20 @@ def update_appointment(request, appointment_id):
     if request.method == "POST":
         form = AppointmentForm(request.POST, instance=appointment)
         if form.is_valid():
+            # Sauvegarder les modifications du rendez-vous
             form.save()
+
+            # Envoi de l'e-mail de confirmation après mise à jour
+            subject = 'Votre rendez-vous a été modifié'
+            message = f'Bonjour {request.user.first_name},\n\nVotre rendez-vous a été modifié avec succès pour le {appointment.date}.'
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [request.user.email]  # Email du patient
+
+            send_mail(subject, message, from_email, recipient_list)
+
+            # Message de succès
             messages.success(request, "Rendez-vous modifié avec succès.")
-            return redirect('appointment_list')  # Rediriger vers la liste des rendez-vous
+            return redirect('appointment_list')  # Redirige vers la liste des rendez-vous
         else:
             messages.error(request, "Une erreur s'est produite. Veuillez vérifier les champs.")
     else:

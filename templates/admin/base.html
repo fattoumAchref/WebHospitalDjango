@@ -193,7 +193,7 @@
                         <form method="get" id="doctorFilterForm">
                             <select name="fonction" id="fonction" class="dropdown doctor--filter" onchange="document.getElementById('doctorFilterForm').submit();">
                                 <option value="">All</option>
-                                <option value="Médecin généraliste" {% if selected_fonction == "Médecin généraliste" %}selected{% endif %}>Médecin généraliste</option>
+                                <option value="Médecin Généraliste" {% if selected_fonction == "Médecin Généraliste" %}selected{% endif %}>Médecin Généraliste</option>
                                 <option value="Médecin Cardiologue" {% if selected_fonction == "Médecin Cardiologue" %}selected{% endif %}>Médecin Cardiologue</option>
                                 <option value="Médecin Dermatologue" {% if selected_fonction == "Médecin Dermatologue" %}selected{% endif %}>Médecin Dermatologue</option>
                                 <option value="Médecin Pédiatre" {% if selected_fonction == "Médecin Pédiatre" %}selected{% endif %}>Médecin Pédiatre</option>
@@ -287,7 +287,7 @@
                                     </a>
                                 </td>                                
                                 <td>
-                                    <form method="post" action="">
+                                    <form method="post" action="{% url 'admin:delete_patient' patient.id %}">
                                         {% csrf_token %}
                                         <button 
                                           type="submit" 
