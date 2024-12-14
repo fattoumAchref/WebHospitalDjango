@@ -73,6 +73,20 @@
                         <span class="sidebar--item">Patients</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{% url 'admin:activity_page' %}">
+                        <span class="icon icon-5"><i class="ri-line-chart-line"></i></span>
+                        <span class="sidebar--item">Activity</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="{%url 'admin:all_factures_list'%}" id="factures">
+                        <span class="icon icon-3"><i class="ri-user-2-line"></i></span>
+                        <span class="sidebar--item" style="white-space: nowrap;">Invoices</span>
+                    </a>
+                </li>
+
                 <!--
                 <li>
                     <a href="#">
