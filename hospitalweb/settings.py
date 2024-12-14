@@ -152,6 +152,6 @@ DEFAULT_FROM_EMAIL = 'salimmnif123@gmail.com'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] ="api-cloud-444017-a0c165b464c8.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] ="api-cloud-444017-a0c165b464c8.json"
 
 LOGIN_URL = '/admin/login/'
