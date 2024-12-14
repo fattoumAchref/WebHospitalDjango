@@ -1,0 +1,230 @@
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebHospital - Analytics Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --background-color: #f4f6f9;
+            --card-background: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background-color: var(--card-background);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2.5rem;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .section-title h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .chart {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .chart h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .chart img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .chart img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .additional-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .card {
+            flex: 1;
+            background-color: var(--background-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .card-title {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .btn-secondary {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container,
+            .additional-info {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Invoices Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Invoices Overview</h2>
+            </div>
+            <div class="chart-container">
+                <div class="chart">
+                    <h3>Total Amounts by Month</h3>
+                    <img src="data:image/png;base64,{{ facture_chart_image }}" alt="Facture Chart">
+                </div>
+                <div class="chart">
+                    <h3>Paid vs Unpaid Invoices</h3>
+                    <img src="data:image/png;base64,{{ payment_chart_image }}" alt="Payment Status Chart">
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Patient Overview</h2>
+            </div>
+            <div class="chart-container">
+                <div class="chart">
+                    <h3>Gender Distribution</h3>
+                    <img src="data:image/png;base64,{{ gender_chart_image }}" alt="Gender Chart">
+                </div>
+                <div class="chart">
+                    <h3>Patient Status Distribution</h3>
+                    <img src="data:image/png;base64,{{ status_chart_image }}" alt="Status Chart">
+                </div>
+                <div class="chart">
+                    <h3>Age Distribution</h3>
+                    <img src="data:image/png;base64,{{ age_chart_image }}" alt="Age Chart">
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Appointments Overview</h2>
+            </div>
+            <div class="chart-container">
+                <div class="chart">
+                    <h3>Appointments Distribution by Month</h3>
+                    <img src="data:image/png;base64,{{ appointment_chart_image }}" alt="Appointments Distribution by Month">
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Information Section -->
+        <div class="section">
+            <div class="additional-info">
+                <div class="card">
+                    <h5 class="card-title">Average Age</h5>
+                    <p>{{ average_age|floatformat:2 }}</p>
+                </div>
+                <div class="card">
+                    <h5 class="card-title">Emergency Cases</h5>
+                    <p>Total Emergency Cases: {{ emergency_case_count }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Dashboard Button -->
+        <div class="text-center">
+            <a href="{% url 'admin:index' %}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 WebHospital. All Rights Reserved.</p>
+    </div>
+</body>
+</html>
