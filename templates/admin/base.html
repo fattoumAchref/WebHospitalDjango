@@ -73,12 +73,14 @@
                         <span class="sidebar--item">Patients</span>
                     </a>
                 </li>
+                <!--
                 <li>
                     <a href="#">
                         <span class="icon icon-5"><i class="ri-line-chart-line"></i></span>
                         <span class="sidebar--item">Activity</span>
                     </a>
                 </li>
+                -->
                 <!--
                 <li>
                     <a href="#">
@@ -273,7 +275,7 @@
                         <tbody>
                             {% for patient in patients %}
                             <tr>
-                                <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+                                <td>{{ patient.username }}</td>
                                 <td>{{ patient.date_joined|date:"d/m/Y" }}</td>
                                 <td>{{ patient.gender }}</td>
                                 <td>{{ patient.age }}</td>
