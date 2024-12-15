@@ -34,8 +34,11 @@ import logging
 
 from urgence.models import EmergencyCase
 from urgence.utils import predict_priority
+from django.views.decorators.csrf import csrf_protect
+
 
 @login_required
+@csrf_protect
 def send_emergency_alert(request):
     if request.method == 'POST':
         # Parse the JSON data sent by the JavaScript

@@ -24,6 +24,9 @@
 
   <link rel="stylesheet" href="{% static 'patient/assets/vendor/animate/animate.css' %}">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  {% load bootstrap5 widget_tweaks static %}
+  {% bootstrap_css %}
+
 </head>
 <body>
 
@@ -140,19 +143,78 @@
 <title>Emergency Alert</title>
 
 <!-- Centered container for the animated section -->
-<div class="emergency-container">
+<div class="emergency-container" style="height: 88vh">
     <div class="emergency-section" id="emergencySection">
-        <p style="font-size: 20px; font-weight: bold; color: #000000; margin-bottom: 10px;">Report a Medical Emergency</p>
+        <p style="font-size: 20px; font-weight: bold; color: #010101; margin-bottom: 10px;">Report a Medical Emergency</p>
         <p style="font-size: 14px; color: #555; margin-bottom: 20px; text-align: center;">
             If you or someone nearby is experiencing a medical emergency, click the button below to report your location to the medical team.
         </p>
-      <textarea id="emergencyDescription" placeholder="Describe the emergency (optional)" rows="3" 
-                style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; resize: none;"></textarea>
+    <textarea id="emergencyDescription" placeholder="Describe the emergency (optional)" rows="3" 
+      style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; resize: none;"></textarea>
       
-        <button id="emergencyBtn">
+                    <!-- Message Field with Speech-to-Text -->
+                    <div class="col-12 py-2">
+                      <label for="{{ form.emergencyDescription.id_for_label }}" class="form-label">Message:</label>
+                      <div class="input-group">
+                          {{ form.description|add_class:"form-control" }}
+                          <button type="button" class="btn btn-outline-secondary ms-2 px-3" id="description-speech-btn" style="height: 40px;">
+                              🎤
+                          </button>
+                          <select id="language-select" class="form-select ms-2" style="width: 150px; height: 40px;">
+                              <option value="en-US">English</option>
+                              <option value="fr-FR">French</option>
+                              <option value="ar-TN">Arabic (Tunisia)</option>
+                          </select>
+                      </div>
+                  </div>
+      <button id="emergencyBtn">
             Report Emergency
-        </button>
+      </button>
     </div>
+    <!-- Speech-to-Text Script -->
+    <script>
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (SpeechRecognition) {
+          const recognition = new SpeechRecognition();
+          recognition.continuous = false; // Single utterance
+          recognition.lang = 'en-US'; // Default language
+
+          const descriptionInput = document.getElementById('emergencyDescription');
+          const descriptionButton = document.getElementById('description-speech-btn');
+          const languageSelect = document.getElementById('language-select');
+
+          // Update recognition language on selection
+          languageSelect.addEventListener('change', () => {
+              recognition.lang = languageSelect.value;
+          });
+
+          // Start recognition on button click
+          descriptionButton.addEventListener('click', () => {
+              recognition.start();
+              descriptionButton.textContent = "🎙 Listening...";
+          });
+
+          // Populate input field with transcript
+          recognition.addEventListener('result', (event) => {
+              const transcript = event.results[0][0].transcript;
+              descriptionInput.value = transcript;
+          });
+
+          // Reset button text after recognition ends
+          recognition.addEventListener('end', () => {
+              descriptionButton.textContent = "🎤 Speak";
+          });
+
+          // Handle recognition errors
+          recognition.addEventListener('error', (event) => {
+              alert(`Speech recognition error: ${event.error}`);
+              descriptionButton.textContent = "🎤 Speak";
+          });
+        } else {
+          alert("Your browser does not support speech recognition. Please use Chrome or Edge.");
+        }
+    </script>
 </div>
 
 <script>

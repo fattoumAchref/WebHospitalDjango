@@ -4,6 +4,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Appointment
 from .forms import AppointmentForm
+from transformers import pipeline
+from langdetect import detect
+import re
 
 # Check if user is an administrator
 def is_admin(user):
@@ -105,3 +108,153 @@ def send_confirmation_email(request):
     send_mail(subject, message, from_email, recipient_list)
     
     return HttpResponse('E-mail envoyé avec succès !')
+
+#sentiment analysis
+class CommentaireAIService:
+    def __init__(self):
+        # Pipeline d'analyse de sentiment (avec prise en charge des sentiments neutres)
+        self.sentiment_analyzer = pipeline(
+            "sentiment-analysis", 
+            model="cardiffnlp/twitter-roberta-base-sentiment"
+        )
+
+        # Pipeline de traduction vers l'anglais
+        self.translator_to_english = pipeline(
+            "translation", 
+            model="Helsinki-NLP/opus-mt-mul-en"  # Modèle multilingue -> anglais
+        )
+        
+        # Modèle pour la détection des dialectes arabes
+        self.dialect_identifier = pipeline(
+            "zero-shot-classification",
+            model="facebook/bart-large-mnli",
+            tokenizer="facebook/bart-large-mnli"
+        )
+    
+    def detecter_langue(self, commentaire):
+        """
+        Détecte la langue du commentaire en détectant les dialectes arabes et autres langues.
+        """
+        try:
+            # Utiliser langdetect pour les langues courantes
+            langue = detect(commentaire)
+            
+            # Si la langue détectée est l'arabe, on passe à une détection de dialecte plus précise
+            if langue == 'ar':
+                dialectes_possibles = ['ar-tun', 'ar-eg', 'ar-sa', 'ar-dz', 'ar-ma', 'ar-ly']
+                # Utilisation d'un modèle pour identifier un dialecte spécifique
+                result = self.dialect_identifier(commentaire, candidate_labels=dialectes_possibles)
+                langue = result['labels'][0]  # Prendre le dialecte le plus probable
+            
+            return langue
+        
+        except Exception as e:
+            print(f"Erreur de détection de langue: {e}")
+            return 'error'
+
+    def traduire_vers_anglais(self, commentaire):
+        """
+        Traduit le commentaire vers l'anglais si nécessaire.
+        """
+        try:
+            result = self.translator_to_english(commentaire)
+            return result[0]['translation_text']
+        except Exception as e:
+            print(f"Erreur de traduction: {e}")
+            return commentaire  # Retourner le commentaire original en cas d'erreur de traduction
+    
+    def analyser_sentiment(self, commentaire):
+        """
+        Analyse le sentiment du commentaire en gérant plusieurs langues, avec prise en charge explicite des sentiments neutres.
+        """
+        try:
+            # Étape 1: Détection de la langue
+            langue = self.detecter_langue(commentaire)
+
+            # Étape 2: Traduction si nécessaire
+            if langue != 'en':  # Si la langue n'est pas l'anglais
+                commentaire = self.traduire_vers_anglais(commentaire)
+
+            # Étape 3: Analyse de sentiment
+            result = self.sentiment_analyzer(commentaire)[0]
+
+            # Mappage des labels en sentiments textuels
+            sentiment_map = {
+                'LABEL_0': 'NEGATIVE',
+                'LABEL_1': 'NEUTRAL',
+                'LABEL_2': 'POSITIVE'
+            }
+
+            # Récupération du sentiment et du score
+            sentiment = sentiment_map.get(result['label'], 'NEUTRAL')  # Par défaut 'NEUTRAL' si le label n'est pas reconnu
+            score = result['score']
+
+            return {
+                'langue_detectee': langue,
+                'sentiment': sentiment,
+                'score': score  # Confiance du modèle (0 à 1)
+            }
+        except Exception as e:
+            print(f"Erreur d'analyse de sentiment: {e}")
+            return {
+                'langue_detectee': 'error',
+                'sentiment': 'NEUTRAL',
+                'score': 0.5  # Valeur par défaut pour l'erreur
+            }
+
+    def filtrer_commentaires_inappropries(self, commentaire):
+        """
+        Filtrer les commentaires contenant des mots inappropriés, y compris les insultes et vulgarités.
+        """
+        mots_interdits = [
+            # Insultes générales (français)
+            'idiot', 'stupide', 'imbécile', 'crétin', 'abruti', 'nul', 'minable', 'débile',
+    
+            # Insultes vulgaires (français)
+            'con', 'connard', 'connasse', 'salaud', 'salopard', 'ordure', 'merde', 'chiant', 
+            'pute', 'p***', 'prostituée', 'enculé', 'bordel',
+    
+            # Insultes racistes ou discriminatoires (français)
+            'raciste', 'nègre', 'bougnoule', 'chintok', 'youpin', 'pédé', 'tapette', 
+            'gouine', 'handicapé', 'mongolien', 'anormal', 'difforme',
+    
+            # Mots agressifs ou menaçants (français)
+            'meurtre', 'assassiner', 'viol', 'tuer', 'détruire', 'attaquer', 'harceler', 
+            'menace', 'casser',
+    
+            # Langage vulgaire ou à connotation sexuelle (français)
+            'bite', 'sexe', 'baiser', 'cul', 'niquer', 'cochon', 'porno', 'pornographique', 
+            'masturbation',
+    
+            # Expressions pour insulter ou rabaisser (français)
+            'tu sers à rien', 'ferme-la', 'dégage', 'tais-toi', 't’es qu’une merde', 
+            'je te hais', 'va te faire voir', 'casse-toi',
+    
+            # Variations orthographiques ou abrégées (français)
+            'c*n', 'fdp', 'tg', 'ntm', 'prout', 'mdr t ki', 'kes tu veux', 'nique ta mère',
+    
+            # Insultes générales (anglais)
+            'idiot', 'stupid', 'dumb', 'useless', 'loser', 'jerk', 'moron',
+    
+            # Insultes vulgaires (anglais)
+            'shit', 'crap', 'bitch', 'bastard', 'asshole', 'freak', 'fuck', 'f***', 
+            'motherfucker', 'slut', 'dick', 'whore',
+    
+            # Expressions haineuses ou offensantes (anglais)
+            'kill', 'murder', 'rape', 'attack', 'harass', 'hate', 'destroy',
+    
+            # Expressions offensantes tunisiennes
+            'tfo', 'aala khrek', 'aala omek', 'aala bok', 'ana nikk omek', 
+            '7achetek', 'kosom omek',
+        ]
+
+        # Vérification des mots interdits insensibles à la casse
+        commentaire_lower = commentaire.lower()
+
+        # Utilisation de regex pour permettre les variations orthographiques et trouver des mots partiels
+        for mot in mots_interdits:
+            pattern = r'\b' + re.escape(mot) + r'\b'
+            if re.search(pattern, commentaire_lower):
+                return False  # Commentaire non approprié
+
+        return True  # Commentaire approprié

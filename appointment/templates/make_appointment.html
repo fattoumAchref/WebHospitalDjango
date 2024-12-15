@@ -4,73 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book an Appointment</title>
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
-    {% load widget_tweaks %}
-    {% load static %}
 
+    {% load bootstrap5 widget_tweaks static %}
+
+    <!-- Bootstrap CSS -->
+    {% bootstrap_css %}
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'patient/assets/css/formulaire.css' %}">
 </head>
 <body>
     <div class="container mt-5">
-        <!-- Card for appointment form -->
+        <!-- Appointment Form Card -->
         <div class="card shadow-lg">
-            <div class="card-header">
+            <div class="card-header text-center">
                 <h1>Make an Appointment</h1>
             </div>
             <div class="card-body">
                 <form method="post" action="{% url 'make_appointment' %}">
                     {% csrf_token %}
 
-                    <div class="row mt-5">
-                        <!-- Time -->
+                    <div class="row mt-4">
+                        <!-- Time Field -->
                         <div class="col-12 col-sm-6 py-2">
                             <label for="{{ form.time.id_for_label }}" class="form-label">Time:</label>
                             {{ form.time }}
                         </div>
 
-                        <!-- Date -->
+                        <!-- Date Field -->
                         <div class="col-12 col-sm-6 py-2">
                             <label for="{{ form.date.id_for_label }}" class="form-label">Date:</label>
                             {{ form.date }}
                         </div>
 
-                        <!-- Department Dropdown -->
+                        <!-- Doctor Selection -->
                         <div class="col-12 col-sm-6 py-2">
                             <label for="{{ form.personnel.id_for_label }}" class="form-label">Choose Doctor:</label>
                             {{ form.personnel }}
                         </div>
 
-                        <!-- Message -->
-                        <div class="col-12 py-2">
-                            <label for="{{ form.description.id_for_label }}" class="form-label">Message:</label>
-                            {{ form.description }}
+                        <!-- Message Field with Speech-to-Text -->
+                    <!-- Message Field with Speech-to-Text -->
+                    <div class="col-12 py-2">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">Message:</label>
+                        <div class="input-group">
+                            {{ form.description|add_class:"form-control" }}
+                            <button type="button" class="btn btn-outline-secondary ms-2 px-3" id="description-speech-btn" style="height: 40px;">
+                                🎤
+                            </button>
+                            <select id="language-select" class="form-select ms-2" style="width: 150px; height: 40px;">
+                                <option value="en-US">English</option>
+                                <option value="fr-FR">French</option>
+                                <option value="ar-TN">Arabic (Tunisia)</option>
+                            </select>
                         </div>
                     </div>
 
+                    </div>
+
                     <!-- Submit Button -->
-                    <div class="text-center">
-                        
-                        <button type="submit" class="btn btn-primary mt-3">Submit Request</button>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
                     </div>
                 </form>
             </div>
-            
         </div>
-        <a href="{% url 'home' %}" class="btn btn-secondary mt-3 wow zoomIn">Back to Home</a>
+
+        <!-- Back to Home Link -->
+        <div class="text-center mt-3">
+            <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+        </div>
     </div>
 
-    <!-- JavaScript files -->
+    <!-- JavaScript Files -->
+    {% bootstrap_javascript %}
     <script src="{% static 'website/assets/js/jquery-3.5.1.min.js' %}"></script>
     <script src="{% static 'website/assets/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'website/assets/vendor/owl-carousel/js/owl.carousel.min.js' %}"></script>
     <script src="{% static 'website/assets/vendor/wow/wow.min.js' %}"></script>
     <script src="{% static 'website/assets/js/theme.js' %}"></script>
 
-    <!-- Initialize WOW.js animations -->
+    <!-- WOW.js Initialization -->
     <script>
         new WOW().init();
+    </script>
+
+    <!-- Speech-to-Text Script -->
+    <script>
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false; // Single utterance
+            recognition.lang = 'en-US'; // Default language
+
+            const descriptionInput = document.querySelector('textarea[name="description"]');
+            const descriptionButton = document.getElementById('description-speech-btn');
+            const languageSelect = document.getElementById('language-select');
+
+            // Update recognition language on selection
+            languageSelect.addEventListener('change', () => {
+                recognition.lang = languageSelect.value;
+            });
+
+            // Start recognition on button click
+            descriptionButton.addEventListener('click', () => {
+                recognition.start();
+                descriptionButton.textContent = "🎙 Listening...";
+            });
+
+            // Populate input field with transcript
+            recognition.addEventListener('result', (event) => {
+                const transcript = event.results[0][0].transcript;
+                descriptionInput.value = transcript;
+            });
+
+            // Reset button text after recognition ends
+            recognition.addEventListener('end', () => {
+                descriptionButton.textContent = "🎤 Speak";
+            });
+
+            // Handle recognition errors
+            recognition.addEventListener('error', (event) => {
+                alert(`Speech recognition error: ${event.error}`);
+                descriptionButton.textContent = "🎤 Speak";
+            });
+        } else {
+            alert("Your browser does not support speech recognition. Please use Chrome or Edge.");
+        }
     </script>
 </body>
 </html>

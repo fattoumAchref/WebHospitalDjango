@@ -293,11 +293,27 @@ href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.awesome-markers/2.0.4/leafl
                     </div>
                     {% endfor %}
                 </div>                
-            </div>
-            
+            </div>           
             <div class="recent--patients">
                 <div class="title">
                     <h2 class="section--title">Recent Patients</h2>
+                    <div>
+                        <form method="get" action="{% url 'admin:index' %}" style="display: flex;margin-left: 587px; height: 43px;">
+                            <input 
+                                type="text" 
+                                name="search_name" 
+                                value="{{ search_name|default:'' }}" 
+                                placeholder="Search by name" 
+                                style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px 0 0 4px;"
+                            >
+                            <button 
+                                type="submit" 
+                                style="padding: 8px 12px; background-color: #70d7a5; color: white; border: none; border-radius: 0 4px 4px 0; cursor: pointer;">
+                                <i class="ri-search-2-line"></i>
+                            </button>
+                        </form>
+                    </div>
+                    
                     <button class="add">
                         <a href="{% url 'admin:add_patient' %}" class="add">
                         <i class="ri-add-line"></i>

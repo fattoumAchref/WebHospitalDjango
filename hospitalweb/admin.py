@@ -33,6 +33,8 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from urgence.models import EmergencyCase
+from django.db.models import Q
+
 def buffer_to_base64(buffer):
     return base64.b64encode(buffer.getvalue()).decode('utf-8')
 
@@ -273,8 +275,6 @@ class CustomAdminSite(admin.AdminSite):
             else:
                 messages.error(request, "No emergency case ID provided.")
 
-
-
         patients = CustomUser.objects.all()
         extra_context['patients'] = patients
 
@@ -291,8 +291,6 @@ class CustomAdminSite(admin.AdminSite):
         extra_context['total_emergency_cases'] = get_total_emergency_cases()
         emergency_cases=EmergencyCase.objects.all()
         extra_context['emergency_cases']=emergency_cases
-
-
 
         # Récupérer la valeur du paramètre 'priority' de la requête GET
         selected_priority = request.GET.get('priority', '')
@@ -312,8 +310,24 @@ class CustomAdminSite(admin.AdminSite):
         if selected_priority:
             return redirect(f"{request.path}?priority={selected_priority}")
         
-
-
+        # Get the search parameter from the request
+        search_name = request.GET.get('search_name', '').strip()
+        
+        # Filter patients based on the search_name
+        if search_name:
+            patients = CustomUser.objects.filter(
+                Q(username__icontains=search_name)
+            )
+        else:
+            patients = CustomUser.objects.all()
+        
+        # Include filtered patients and search_name in extra_context
+        if extra_context is None:
+            extra_context = {}
+        
+        extra_context['patients'] = patients
+        extra_context['search_name'] = search_name
+        
         extra_context['doctor_percentage_change'] = get_doctor_percentage_change()
         extra_context['doctor_increase'] = get_doctor_increase()
         extra_context['doctor_decrease'] = get_doctor_decrease()
