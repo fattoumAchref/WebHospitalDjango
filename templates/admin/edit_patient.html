@@ -27,6 +27,12 @@
                             <label for="{{ form.first_name.id_for_label }}" class="form-label">Username:</label>
                             {{ form.username }}
                         </div>
+                        
+                        <!-- Gender -->
+                        <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.prenom.id_for_label }}" class="form-label">Gender:</label>
+                            {{ form.gender }}
+                        </div>
             
                         <!-- Email -->
                         <div class="col-12 col-sm-6 py-2">
@@ -68,6 +74,21 @@
                         <div class="col-12 col-sm-6 py-2">
                             <label for="{{ form.is_active.id_for_label }}" class="form-label">Active:</label>
                             {{ form.is_active }}
+                        </div>
+                        <!-- is_active -->
+                        <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.photo.id_for_label }}" class="form-label">Weight:</label>
+                            {{ form.poids }}
+                        </div>
+                         <!-- is_active -->
+                         <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.photo.id_for_label }}" class="form-label">Height:</label>
+                            {{ form.taille }}
+                        </div>
+                         <!-- is_active -->
+                         <div class="col-12 col-sm-6 py-2">
+                            <label for="{{ form.photo.id_for_label }}" class="form-label">Medical history:</label>
+                            {{ form.antecedents_medicaux }}
                         </div>
 
                          <!-- Submit Button -->

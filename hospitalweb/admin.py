@@ -164,14 +164,18 @@ class DoctorForm(forms.ModelForm):
 class PatientForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['username','first_name', 'last_name', 'email', 'phone_number', 'status', 'is_active', 'age','date_joined','is_staff']
+        fields = ['username','first_name', 'last_name','gender', 'email', 'phone_number', 'status', 'is_active', 'age','date_joined','is_staff','poids','taille','antecedents_medicaux']
         widgets = {
             'date_joined': forms.DateInput(attrs={'class': 'form-control'}),
             'username' : forms.TextInput(attrs={'class': 'form-control'}),
             'first_name' : forms.TextInput(attrs={'class': 'form-control'}),
             'last_name' : forms.TextInput(attrs={'class': 'form-control'}),  
+            'last_name' : forms.TextInput(attrs={'class': 'form-control'}),  
             'email' : forms.TextInput(attrs={'class': 'form-control'}),
             'phone_number' : forms.TextInput(attrs={'class': 'form-control'}),
+            'poids' : forms.NumberInput(attrs={'class': 'form-control'}),
+            'taille' : forms.NumberInput(attrs={'class': 'form-control'}),
+            'antecedents_medicaux' : forms.TextInput(attrs={'class': 'form-control'}),
         }
 
 class AppointmentForm(forms.ModelForm):

@@ -49,8 +49,9 @@ urlpatterns = [
     path('facture/pdf/<int:facture_id>/', fa.generate_pdf, name='generate_pdf'),
     path('forgot-password/', views.forgot_password, name='forgot_password'),
     path('reset-password/<uidb64>/<token>/', views.reset_password, name='reset_password'),
-    path('delete/', views.update_patient, name='delete_patient'),
-
+    path('delete/', views.delete_patient, name='delete_patient'),
+    path('results/', views.model_results_view, name='model_results_view'),
+    path('download-report/', views.download_report, name='download_report'),
 
     path('admin/custom-dashboard/', custom_dashboard, name='custom_dashboard'),  # Custom dashboard URL
 
