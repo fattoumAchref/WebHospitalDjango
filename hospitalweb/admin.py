@@ -32,7 +32,7 @@ import csv
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-
+from urgence.models import EmergencyCase
 def buffer_to_base64(buffer):
     return base64.b64encode(buffer.getvalue()).decode('utf-8')
 
@@ -106,28 +106,39 @@ def mark_patient_as_left(patient_id):
         print(f"Patient with ID {patient_id} not found.")
 
 def get_total_emergency_cases():
-    return CustomUser.objects.filter(emergency_case=True).count()
+    return EmergencyCase.objects.count()
 
 # Calculate the percentage change in emergency cases
 def get_emergency_case_percentage_change():
     last_month_date = date.today() - timedelta(days=30)
-    emergency_cases_last_month = CustomUser.objects.filter(
-        emergency_case=True, date_joined__lt=last_month_date
+    emergency_cases_last_month = EmergencyCase.objects.filter(
+        created_at__lt=last_month_date
     ).count()
-    current_emergency_cases = CustomUser.objects.filter(emergency_case=True).count()
+    current_emergency_cases = EmergencyCase.objects.count()
     if emergency_cases_last_month > 0:
-        return ((current_emergency_cases - emergency_cases_last_month) / emergency_cases_last_month) * 100
+        percentage_change = ((current_emergency_cases - emergency_cases_last_month) / emergency_cases_last_month) * 100
+        return percentage_change
     return 0
 
 # Count the new emergency cases in the last month
 def get_emergency_case_increase():
     last_month_date = date.today() - timedelta(days=30)
-    return CustomUser.objects.filter(emergency_case=True, date_joined__gte=last_month_date).count()
+    return EmergencyCase.objects.filter(created_at__gte=last_month_date).count()
 
 # Count the emergency cases resolved in the last month
 def get_emergency_case_decrease():
     last_month_date = date.today() - timedelta(days=30)
-    return CustomUser.objects.filter(emergency_case=True, date_left__gte=last_month_date).count()
+    return EmergencyCase.objects.filter(created_at__lt=last_month_date).count()
+
+
+class EmergencyCaseForm(forms.ModelForm):
+    class Meta:
+        model = EmergencyCase
+        fields = ['priority', 'status']
+        widgets = {
+            'priority': forms.TextInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
+        }
 
 class CustomAdminLoginView(LoginView):
     template_name = 'admin/custom_login.html'
@@ -243,6 +254,27 @@ class CustomAdminSite(admin.AdminSite):
           except Exception as e:
             messages.error(request, f"An error occurred while deleting the doctor: {str(e)}")
 
+
+        # Handle emergency case deletion
+        if request.method == "POST" and "delete_emergency_case" in request.POST:
+            emergency_case_id = request.POST.get("delete_emergency_case")
+            if emergency_case_id:
+                try:
+                    # Fetch the emergency case object
+                    emergency_case = get_object_or_404(EmergencyCase, id=emergency_case_id)
+                    
+                    # Proceed with deletion
+                    emergency_case.delete()
+                    messages.success(request, "Emergency case deleted successfully!")
+                except EmergencyCase.DoesNotExist:
+                    messages.error(request, "Emergency case not found.")
+                except Exception as e:
+                    messages.error(request, f"An error occurred while deleting the emergency case: {str(e)}")
+            else:
+                messages.error(request, "No emergency case ID provided.")
+
+
+
         patients = CustomUser.objects.all()
         extra_context['patients'] = patients
 
@@ -256,7 +288,31 @@ class CustomAdminSite(admin.AdminSite):
         extra_context['doctors'] = doctors
         extra_context['selected_fonction'] = selected_fonction 
 
-        extra_context['emergency_cases'] = get_total_emergency_cases()
+        extra_context['total_emergency_cases'] = get_total_emergency_cases()
+        emergency_cases=EmergencyCase.objects.all()
+        extra_context['emergency_cases']=emergency_cases
+
+
+
+        # Récupérer la valeur du paramètre 'priority' de la requête GET
+        selected_priority = request.GET.get('priority', '')
+
+        # Appliquer le filtre basé sur la valeur de 'priority'
+        if selected_priority:
+            emergency_cases = EmergencyCase.objects.filter(priority__exact=selected_priority)
+        else:
+            emergency_cases = EmergencyCase.objects.all()
+
+
+        extra_context = extra_context or {}
+        extra_context['emergency_cases'] = emergency_cases
+        extra_context['selected_priority'] = selected_priority  # Passer la valeur sélectionnée au template
+
+        # Si la page doit se rafraîchir avec le filtre, forcer un redirection
+        if selected_priority:
+            return redirect(f"{request.path}?priority={selected_priority}")
+        
+
 
         extra_context['doctor_percentage_change'] = get_doctor_percentage_change()
         extra_context['doctor_increase'] = get_doctor_increase()
@@ -338,7 +394,13 @@ class CustomAdminSite(admin.AdminSite):
       patient = get_object_or_404(CustomUser, id=patient_id)
       patient.delete()
       return redirect('admin:index')
-     
+    
+    def delete_emergency_case(self,request, emergency_case_id):
+      emergency_case = get_object_or_404(EmergencyCase, id=emergency_case_id)
+      emergency_case.delete()
+      return redirect('admin:index')
+    
+
     def view_appointments(self, request):
         appointments = Appointment.objects.all()
         return render(request, 'admin/all_appointments_list.html', {'appointments': appointments})
@@ -347,7 +409,11 @@ class CustomAdminSite(admin.AdminSite):
         patients = CustomUser.objects.all()
         return render(request,'admin/all_patients_list.html',{'patients' : patients})
     
-       
+    def view_emergencyCases(self,request):
+        emergency_cases = EmergencyCase.objects.all()  # Should be a QuerySet
+        return render(request, 'admin/all_emergency_list.html', {'emergency_cases': emergency_cases})
+
+
     def edit_appointment(self,request, appointment_id):
        appointment = get_object_or_404(Appointment, id=appointment_id)
     
@@ -361,6 +427,22 @@ class CustomAdminSite(admin.AdminSite):
 
        return render(request, 'admin/edit_appointment.html', {'form': form, 'appointment': appointment})  
     
+
+    def edit_emergency_case(self, request, emergency_case_id):
+        emergency_case = get_object_or_404(EmergencyCase, id=emergency_case_id)
+
+        if request.method == 'POST':
+            form = EmergencyCaseForm(request.POST, instance=emergency_case)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Emergency case updated successfully!")
+                return redirect('/admin/emergency_cases/')
+        else:
+            form = EmergencyCaseForm(instance=emergency_case)
+
+        return render(request, 'admin/edit_emergency_case.html', {'form': form, 'emergency_case': emergency_case})
+    
+
     def delete_appointment(self,request, appointment_id):
       appointment = get_object_or_404(Appointment, id=appointment_id)
       appointment.delete()
@@ -440,6 +522,10 @@ class CustomAdminSite(admin.AdminSite):
         path('factures/', self.view_factures, name='all_factures_list'),
         path('factures/edit/<int:facture_id>/', self.admin_view(self.edit_facture), name='edit_facture'),
         path('factures/delete/<int:facture_id>/', self.admin_view(self.delete_facture), name='delete_facture'),
+        path('emergency_cases/', self.view_emergencyCases, name="all_emergency_cases"),
+        path('emergency_cases/edit/<int:emergency_case_id>/', self.admin_view(self.edit_emergency_case), name="edit_emergency_case"),
+        path('emergency_cases/delete/<int:emergency_case_id>/', self.admin_view(self.delete_emergency_case), name='delete_emergency_case'),
+
       ]
       return custom_urls + urls
 
@@ -468,7 +554,7 @@ class CustomAdminSite(admin.AdminSite):
         }
 
         # Emergency Cases
-        emergency_case_count = CustomUser.objects.filter(emergency_case=True).count()
+        emergency_case_count = EmergencyCase.objects.count()
         print("Emergency case count:", emergency_case_count)
 
         # Generate charts

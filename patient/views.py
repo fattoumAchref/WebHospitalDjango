@@ -24,12 +24,39 @@ import pandas as pd
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from django.http import HttpResponse, JsonResponse
+import json
 from django.views.decorators.csrf import csrf_exempt
 import os
 import cv2
 import numpy as np
 import face_recognition
 import logging
+
+from urgence.models import EmergencyCase
+from urgence.utils import predict_priority
+
+@login_required
+def send_emergency_alert(request):
+    if request.method == 'POST':
+        # Parse the JSON data sent by the JavaScript
+        data = json.loads(request.body)
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+        description = data.get('description', '') 
+        priority = predict_priority(description)
+        if latitude and longitude:
+
+            # Create the emergency case in the database
+            EmergencyCase.objects.create(latitude=latitude, longitude=longitude,description=description,priority=priority )
+
+            # Respond with success message
+            return JsonResponse({'message': 'Emergency alert sent!'}, status=200)
+        else:
+            return JsonResponse({'message': 'Invalid data received.'}, status=400)
+        
+        return redirect('home')  # Redirect back to the patient's dashboard (index.html)
+
+    return render(request, 'patient/index.html')
 
 
 # Inscription
@@ -157,8 +184,10 @@ def face_login(request):
             known_embedding = np.array(user.face_embeddings)  # Embedding de l'utilisateur stocké
             distance = np.linalg.norm(uploaded_embedding - known_embedding)
             
-            if distance < 0.6:  # Seuil de similarité
+            
+            if distance < 0.5:  # Seuil de similarité
                 login(request, user)
+                print(distance)
                 return JsonResponse({'status': 'success', 'message': 'Connexion réussie.'})
         
         return JsonResponse({'status': 'error', 'message': 'Aucune correspondance trouvée.'})

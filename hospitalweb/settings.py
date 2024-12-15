@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'appointment',
     'bootstrap5',
     'face_recognition',
-    'face_recognition_models'
+    'face_recognition_models',
+    'urgence',
 ]
 
 MIDDLEWARE = [
