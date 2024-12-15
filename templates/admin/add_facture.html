@@ -1,0 +1,58 @@
+{% load static bootstrap5 widget_tweaks %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<!-- Add the necessary CSS files -->
+<link rel="stylesheet" href="{% static 'patient/assets/css/rendez-vous.css' %}">
+<link rel="stylesheet" href="{% static 'patient/assets/css/maicons.css' %}">
+<link rel="stylesheet" href="{% static 'patient/assets/css/bootstrap.css' %}">
+<link rel="stylesheet" href="{% static 'patient/assets/vendor/owl-carousel/css/owl.carousel.css' %}">
+<link rel="stylesheet" href="{% static 'patient/assets/vendor/animate/animate.css' %}">
+<link rel="stylesheet" href="{% static 'patient/assets/css/theme.css' %}">
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Add Invoice</h2>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="patient">Patient</label>
+                    {{ form.patient|add_class:"form-control" }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    {{ form.description|add_class:"form-control" }}
+                </div>
+
+                <div class="form-group">
+                    <label for="montant">Montant</label>
+                    {{ form.montant|add_class:"form-control" }}
+                </div>
+
+                <div class="form-group">
+                    <label for="date_paiement">Date Paiement</label>
+                    {{ form.date_paiement|add_class:"form-control" }}
+                </div>
+
+                <div class="form-group">
+                    <label for="est_payee">Est Payée</label>
+                    {{ form.est_payee|add_class:"form-control"}}
+                </div>
+                
+                <br>
+                <button type="submit" class="btn btn-primary w-100">Add Invoice</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript files -->
+<script src="{% static 'website/assets/js/jquery-3.5.1.min.js' %}"></script>
+<script src="{% static 'website/assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'website/assets/vendor/owl-carousel/js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'website/assets/vendor/wow/wow.min.js' %}"></script>
+<script src="{% static 'website/assets/js/theme.js' %}"></script>

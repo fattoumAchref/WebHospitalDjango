@@ -513,6 +513,24 @@ class CustomAdminSite(admin.AdminSite):
 
         return render(request, 'admin/edit_facture.html', {'form': form, 'facture': facture})
     
+    def add_invoice_view(self, request):
+        if not request.user.is_staff:
+            messages.error(request, "You are not authorized to perform this action.")
+            return redirect('/admin')  # Redirect to the admin page or another page if not authorized
+
+        if request.method == 'POST':
+            form = FactureForm(request.POST)  # Process form data
+            if form.is_valid():
+                form.save()  # Save the new invoice
+                messages.success(request, "Invoice added successfully!")
+                return redirect('/admin')  # Or redirect to a page where invoices are listed or where the admin is redirected
+        else:
+            form = FactureForm()  # Empty form when the page is first loaded
+
+        print(form)  # Optional: to inspect the form or for debugging purposes
+
+        return render(request, 'admin/add_facture.html', {'form': form})  # Render the form in a template
+    
     def delete_facture(self,request, facture_id):
       facture = get_object_or_404(Facture, id=facture_id)
       facture.delete()
@@ -539,7 +557,7 @@ class CustomAdminSite(admin.AdminSite):
         path('emergency_cases/', self.view_emergencyCases, name="all_emergency_cases"),
         path('emergency_cases/edit/<int:emergency_case_id>/', self.admin_view(self.edit_emergency_case), name="edit_emergency_case"),
         path('emergency_cases/delete/<int:emergency_case_id>/', self.admin_view(self.delete_emergency_case), name='delete_emergency_case'),
-
+        path('factures/add/', self.admin_view(self.add_invoice_view), name='add_facture'),
       ]
       return custom_urls + urls
 
