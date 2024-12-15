@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import SetPasswordForm
@@ -15,21 +14,75 @@ from personnel.models import Personnel
 from django.conf import settings
 from patient.models import CustomUser  # Import de ton modèle personnalisé
 
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import os
+import cv2
+import numpy as np
+import face_recognition
+import logging
+
 
 # Inscription
+# Fonction pour extraire les embeddings faciaux
+def extract_face_embeddings(image_path):
+    img = face_recognition.load_image_file(image_path)
+    face_encodings = face_recognition.face_encodings(img)
+    if face_encodings:
+        return face_encodings[0]
+    return None
 
-from django.contrib.admin.views.decorators import staff_member_required
-
+# Fonction de similarité cosinus
+def cosine_similarity(vec1, vec2):
+    vec1 = np.array(vec1)
+    vec2 = np.array(vec2)
+    return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
 def register(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        # Créer un formulaire avec les données POST et les fichiers
+        form = CustomUserCreationForm(request.POST, request.FILES)
+        
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, 'Inscription réussie !')
-            return redirect('login')
-    else:
-        form = CustomUserCreationForm()
+            # Récupérer les données du formulaire
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            phone_number = form.cleaned_data.get('phone_number')
+            face_image = form.cleaned_data.get('face_image')
+            password = form.cleaned_data['password1']  # Récupérer le mot de passe
+
+            # Créer un nouvel utilisateur avec CustomUser
+            user = CustomUser.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                phone_number=phone_number
+            )
+
+            # Traitement de l'image faciale si elle est fournie
+            if face_image:
+                # Charger l'image faciale et récupérer les embeddings
+                image = face_recognition.load_image_file(face_image)
+                face_encoding = face_recognition.face_encodings(image)
+
+                if len(face_encoding) == 0:
+                    return JsonResponse({'status': 'error', 'message': 'Aucun visage détecté dans l\'image.'})
+
+                # Convertir l'ndarray en liste et assigner les embeddings
+                user.set_face_embeddings(face_encoding[0])  # On suppose que face_encoding[0] est un ndarray
+
+            # Sauvegarder l'utilisateur avec les embeddings faciaux
+            user.save()
+
+            # Rediriger vers une autre page après l'inscription réussie
+            return JsonResponse({'status': 'success', 'message': 'Utilisateur enregistré avec succès.'})
+
+        # Si le formulaire n'est pas valide, retourner un message d'erreur
+        return JsonResponse({'status': 'error', 'message': 'Les informations soumises sont invalides.'})
+
+    # Si la méthode n'est pas POST, afficher le formulaire d'inscription
+    form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
 # Connexion
@@ -40,6 +93,7 @@ def login_view(request):
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
+                messages.success(request, f'Bienvenue ! Vous êtes maintenant connecté.')
                 return redirect('home')
             else:
                 messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
@@ -48,6 +102,60 @@ def login_view(request):
     else:
         form = CustomAuthenticationForm()
     return render(request, 'login.html', {'form': form})
+@login_required
+def upload_face(request):
+    if request.method == 'POST' and 'face_image' in request.FILES:
+        user = request.user
+        face_image = request.FILES['face_image']
+
+        # Enregistrer l'image
+        media_path = os.path.join(settings.MEDIA_ROOT, 'users', str(user.id))
+        os.makedirs(media_path, exist_ok=True)
+        image_path = os.path.join(media_path, 'face.jpg')
+        with open(image_path, 'wb') as f:
+            for chunk in face_image.chunks():
+                f.write(chunk)
+
+        # Extraire les embeddings de l'image (dummy embeddings pour exemple)
+        embeddings = extract_face_embeddings(image_path)
+        user.face_embeddings = embeddings
+        user.save()
+
+        messages.success(request, "Votre photo a été téléchargée avec succès.")
+        return redirect('profile')
+    return render(request, 'upload_face.html')
+
+# Fonction d'extraction des embeddings (exemple simplifié)
+
+# Tester avec une image spécifique
+
+# Authentification par reconnaissance faciale
+@csrf_exempt
+def face_login(request):
+    if request.method == 'POST':
+        face_image = request.FILES['face_image']  # L'image envoyée depuis la vue frontend
+        
+        # Charger l'image et obtenir les embeddings
+        image = face_recognition.load_image_file(face_image)
+        face_encoding = face_recognition.face_encodings(image)
+        
+        if len(face_encoding) == 0:
+            return JsonResponse({'status': 'error', 'message': 'Aucun visage détecté.'})
+        
+        uploaded_embedding = face_encoding[0]  # Embedding du visage envoyé
+        
+        # Comparer avec les embeddings des utilisateurs
+        users = CustomUser.objects.exclude(face_embeddings__isnull=True)
+        for user in users:
+            known_embedding = np.array(user.face_embeddings)  # Embedding de l'utilisateur stocké
+            distance = np.linalg.norm(uploaded_embedding - known_embedding)
+            
+            if distance < 0.6:  # Seuil de similarité
+                login(request, user)
+                return JsonResponse({'status': 'success', 'message': 'Connexion réussie.'})
+        
+        return JsonResponse({'status': 'error', 'message': 'Aucune correspondance trouvée.'})
+
 
 # Page d'accueil
 def home(request):
@@ -61,7 +169,7 @@ def update_patient(request):
         form = PatientUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, "Vos informations ont étées mises à jour avec succès.")
+            messages.success(request, "Vos informations ont été mises à jour avec succès.")
             return redirect('update_patient')
     else:
         form = PatientUpdateForm(instance=request.user)
@@ -135,6 +243,6 @@ def reset_password(request, uidb64, token):
             return HttpResponse('Le lien est invalide ou a expiré.', status=400)
     except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
         return HttpResponse('Lien invalide.', status=400)
-@staff_member_required
+
 def custom_dashboard(request):
-    return HttpResponse("<h1>Welcome to the Custom Dashboard</h1>")
+    return render(request, 'admin/custom_dashboard.html')  # Template for the dashboard 

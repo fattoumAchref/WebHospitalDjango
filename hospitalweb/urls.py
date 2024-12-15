@@ -33,12 +33,18 @@ from hospitalweb.views import custom_dashboard
 urlpatterns = [
     path('admin/login/', CustomAdminLoginView.as_view(), name='admin_login'),  # Custom login
     path('admin/', custom_admin_site.urls),
-    path('personnel/',include('personnel.urls')),
-    path('',views.home, name='home'),
+    path('personnel/', include('personnel.urls')),
+    path('', views.home, name='home'),
     path('register/', views.register, name='register'),
-    path('login/', views.login_view, name='login'),
+    path('login/', views.login_view, name='login'),  # Connexion via votre propre vue
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('forgot-password/', views.forgot_password, name='forgot_password'),
+    path('reset-password/<uidb64>/<token>/', views.reset_password, name='reset_password'),
+
+    # Ajoutez cette ligne pour la connexion via reconnaissance faciale
+    path('face-login/', views.face_login, name='face_login'), 
+
+    # Autres URL de l'application
     path('ajouter-dossier/', vd.ajouter_dossier_medical, name='ajouter_dossier_medical'),
     path('rendez-vous/', va.make_appointment, name='make_appointment'),
     path('appointment/update/<int:appointment_id>/', va.update_appointment, name='update_appointment'),
@@ -47,11 +53,6 @@ urlpatterns = [
     path('appointment/<int:appointment_id>/delete/', va.delete_appointment, name='delete_appointment'),
     path('update/', views.update_patient, name='update_patient'),
     path('facture/pdf/<int:facture_id>/', fa.generate_pdf, name='generate_pdf'),
-    path('forgot-password/', views.forgot_password, name='forgot_password'),
-    path('reset-password/<uidb64>/<token>/', views.reset_password, name='reset_password'),
-
-
-
     path('admin/custom-dashboard/', custom_dashboard, name='custom_dashboard'),  # Custom dashboard URL
 
-    ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

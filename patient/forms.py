@@ -5,7 +5,7 @@ from django import forms
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = ['username', 'email', 'phone_number', 'password1', 'password2']
+        fields = ['username', 'email', 'phone_number', 'password1', 'password2','face_image']
         widgets = {
             'username': forms.TextInput(attrs={
                 'placeholder': 'Nom d’utilisateur',

@@ -17,6 +17,9 @@
                 {{ form.as_p }}
                 <button type="submit">Se connecter</button>
             </form>
+            <div class="face-login-container">
+                <button id="face-login-button">Se connecter avec la reconnaissance faciale</button>
+            </div>
             <div class="footer">
                 <p>Vous n'avez pas de compte ? <a href="{% url 'register' %}">S'inscrire</a></p>
                 <p><a href="{% url 'forgot_password' %}">Mot de passe oublié ?</a></p> <!-- Lien vers la page de réinitialisation -->
@@ -24,4 +27,65 @@
         </div>
     </div>
 </body>
+<script>
+    const faceLoginButton = document.getElementById('face-login-button');
+    faceLoginButton.addEventListener('click', async () => {
+        try {
+            const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const videoElement = document.createElement('video');
+            videoElement.srcObject = videoStream;
+            videoElement.play();
+
+            // Afficher une fenêtre de prévisualisation
+            const preview = document.createElement('div');
+            preview.style.position = 'fixed';
+            preview.style.top = '50%';
+            preview.style.left = '50%';
+            preview.style.transform = 'translate(-50%, -50%)';
+            preview.style.backgroundColor = 'white';
+            preview.style.padding = '20px';
+            preview.style.borderRadius = '8px';
+            preview.innerHTML = `
+                <video autoplay style="width: 300px; height: 200px;"></video>
+                <button id="capture-button">Capturer</button>
+            `;
+            document.body.appendChild(preview);
+            preview.querySelector('video').srcObject = videoStream;
+
+            document.getElementById('capture-button').addEventListener('click', async () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = 300;
+                canvas.height = 200;
+                canvas.getContext('2d').drawImage(preview.querySelector('video'), 0, 0, 300, 200);
+
+                // Envoyer l'image au backend
+                const imageBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg'));
+                const formData = new FormData();
+                formData.append('face_image', imageBlob);
+
+                const response = await fetch("{% url 'face_login' %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+                });
+
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert('Connexion réussie !');
+                    window.location.href = '/'; // Redirigez vers la page d'accueil
+                } else {
+                    alert('Échec de la reconnaissance faciale.');
+                }
+
+                // Nettoyer la prévisualisation
+                videoStream.getTracks().forEach(track => track.stop());
+                preview.remove();
+            });
+        } catch (error) {
+            alert('Impossible d\'accéder à la caméra.');
+            console.error(error);
+        }
+    });
+</script>
+
 </html>

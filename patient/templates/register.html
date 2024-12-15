@@ -25,7 +25,7 @@
             </div>
             {% endif %}
 
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 
                 <div class="input-group">
@@ -58,11 +58,18 @@
                     {{ form.password2.errors }}
                 </div>
 
+                <!-- Ajout du champ pour la photo -->
+                <div class="input-group">
+                    {{ form.face_image.label_tag }}
+                    {{ form.face_image }}
+                    {{ form.face_image.errors }}
+                </div>
+
                 <button type="submit">Sign Up</button>
             </form>
 
             <div class="footer">
-                <p>You already have an account ? <a href="{% url 'login' %}">Sign In</a></p>
+                <p>You already have an account? <a href="{% url 'login' %}">Sign In</a></p>
             </div>
         </div>
     </div>
