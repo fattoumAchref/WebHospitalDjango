@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="{% static 'patient/assets/vendor/owl-carousel/css/owl.carousel.css' %}">
 
   <link rel="stylesheet" href="{% static 'patient/assets/vendor/animate/animate.css' %}">
-
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
 <body>
 
@@ -85,34 +85,104 @@
   </div>
 
 
-  <div class="bg-light">
-    <div class="page-section py-3 mt-md-n5 custom-index">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-md-4 py-3 py-md-0">
-            <div class="card-service wow fadeInUp">
-              <div class="circle-shape bg-secondary text-white">
-              </div>
-              <p><span>Chat</span> with a doctors</p>
-            </div>
-          </div>
-          <div class="col-md-4 py-3 py-md-0">
-            <div class="card-service wow fadeInUp">
-              <div class="circle-shape bg-primary text-white">
-              </div>
-              <p><span>One</span>-Health Protection</p>
-            </div>
-          </div>
-          <div class="col-md-4 py-3 py-md-0">
-            <div class="card-service wow fadeInUp">
-              <div class="circle-shape bg-accent text-white">
-              </div>
-              <p><span>One</span>-Health Pharmacy</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> <!-- .page-section -->
+  <style>
+    /* Full page container to center the content */
+    .emergency-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50vh; /* Full page height */
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        position: relative;
+    }
+
+    /* The section that will animate */
+    .emergency-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent; /* No background */
+        font-family: Arial, sans-serif;
+        width: 90%;
+        max-width: 350px; /* Smaller width */
+        opacity: 0; /* Start as invisible */
+        transform: translateY(30px); /* Start from below */
+        transition: opacity 1s, transform 1s; /* Smooth transition */
+    }
+
+    /* Button styling */
+    #emergencyBtn {
+        background-color: #f30000;
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        width: 100%;
+        outline: none;
+    }
+
+    #emergencyBtn:hover {
+        background-color: #e40000;
+        transform: scale(1.05);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+    }
+</style>
+
+<title>Emergency Alert</title>
+
+<!-- Centered container for the animated section -->
+<div class="emergency-container">
+    <div class="emergency-section" id="emergencySection">
+        <p style="font-size: 20px; font-weight: bold; color: #000000; margin-bottom: 10px;">Report a Medical Emergency</p>
+        <p style="font-size: 14px; color: #555; margin-bottom: 20px; text-align: center;">
+            If you or someone nearby is experiencing a medical emergency, click the button below to report your location to the medical team.
+        </p>
+      <textarea id="emergencyDescription" placeholder="Describe the emergency (optional)" rows="3" 
+                style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; resize: none;"></textarea>
+      
+        <button id="emergencyBtn">
+            Report Emergency
+        </button>
+    </div>
+</div>
+
+<script>
+    // Create an IntersectionObserver to detect when the emergency section is in view
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            // Check if the element is in the viewport
+            if (entry.isIntersecting) {
+                // Add the animation class when in view
+                entry.target.classList.add('animate');
+                // Stop observing once the animation is triggered
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.5 // Trigger when 50% of the element is in view
+    });
+
+    // Start observing the emergency section
+    const emergencySection = document.getElementById('emergencySection');
+    observer.observe(emergencySection);
+</script>
+
+<style>
+    /* Add the animation when the element is in view */
+    .emergency-section.animate {
+        opacity: 1;
+        transform: translateY(0); /* Animate to its normal position */
+    }
+</style>
     
     <div class="page-section pb-0">
       <div class="container">
@@ -364,5 +434,38 @@
   })(document, window.kommunicate || {});
 /* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
 </script>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+  const emergencyBtn = document.getElementById('emergencyBtn');
+  
+  emergencyBtn.addEventListener('click', () => {
+    const description = document.getElementById('emergencyDescription').value.trim();
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(position => {
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
+              console.log('Latitude:', latitude, 'Longitude:', longitude,'Description:', description);
+              fetch('{% url 'send_emergency_alert' %}', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRFToken': '{{ csrf_token }}',
+                  },
+                  body: JSON.stringify({ latitude, longitude, description }),
+              })
+              .then(response => response.json())
+              .then(data => {
+                  alert('Emergency alert sent!');
+              })
+              .catch(error => console.error('Error:', error));
+          });
+      } else {
+          alert('Geolocation is not supported by this browser.');
+      }
+  });
+  </script>
+
+
 </body>
 </html>

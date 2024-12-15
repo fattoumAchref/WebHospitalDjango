@@ -29,7 +29,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from hospitalweb.admin import custom_admin_site, CustomAdminLoginView
 from hospitalweb.views import custom_dashboard
-
+from urgence import views as urgence_views
 urlpatterns = [
     path('admin/login/', CustomAdminLoginView.as_view(), name='admin_login'),  # Custom login
     path('admin/', custom_admin_site.urls),
@@ -59,5 +59,8 @@ urlpatterns = [
     path('download-report/', views.download_report, name='download_report'),
 
     path('admin/custom-dashboard/', custom_dashboard, name='custom_dashboard'),  # Custom dashboard URL
+
+    path('send_emergency_alert/',views.send_emergency_alert,name='send_emergency_alert'),
+    path('fetch_emergencies/', urgence_views.fetch_emergencies, name='fetch_emergencies'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

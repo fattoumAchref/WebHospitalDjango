@@ -6,7 +6,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="{% static 'admin.css' %}"  rel="stylesheet" >
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+        <!-- Leaflet CSS -->
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css"
+/>
+
+<!-- Leaflet Awesome Markers CSS -->
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.awesome-markers/2.0.4/leaflet.awesome-markers.css"
+/>
+
+<!-- Leaflet JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+
+<!-- Leaflet Awesome Markers JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.awesome-markers/2.0.4/leaflet.awesome-markers.min.js"></script>
     <title>Dashboard</title>
 </head>
 <body>    
@@ -58,6 +77,12 @@
                     <a href="#" id="active--link">
                         <span class="icon icon-1"><i class="ri-layout-grid-line"></i></span>
                         <span class="sidebar--item">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'admin:all_emergency_cases'%}" id="all_emergency_case">
+                        <span class="icon icon-2" style="color: red;" ><i class="fas fa-exclamation-triangle"></i></span>
+                        <span class="sidebar--item">Emergency Cases</span>
                     </a>
                 </li>
                 <li>
@@ -190,7 +215,7 @@
                         <div class="card--data">
                             <div class="card--content">
                                 <h5 class="card--title">Emergency cases</h5>
-                                <h1>{{emergency_cases}}</h1>
+                                <h1>{{total_emergency_cases}}</h1>
                             </div>
                             <i class="ri-hotel-bed-line card--icon--lg"></i>
                         </div>
@@ -202,6 +227,13 @@
                     </div>
                 </div>
             </div>
+
+            <div style="display: flex; justify-content: center; align-items: center; margin: 20px 0;">
+                
+                <div id="map" style="height: 400px; width: 90%; max-width: 1200px; border: 2px solid #ccc; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);"></div>
+            </div>
+
+
             <div class="doctors">
                 <div class="title">
                     <h2 class="section--title">Doctors</h2>
@@ -343,5 +375,54 @@
         </div>
     </section>
     <script src="{% static 'main.js' %}"></script>
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script>
+    // Initialize the map and set the initial view
+    var map = L.map('map').setView([51.505, -0.09], 13); // Default coordinates (51.505, -0.09) for demonstration
+
+    // Add the tile layer (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Function to return a custom icon based on the priority
+    function getMarkerIcon(priority) {
+        var color;
+        if (priority === "High") {
+            color = 'red'; // Red for high priority
+        } else if (priority === "Medium") {
+            color = 'orange'; // Orange for medium priority
+        } else if (priority === "Low") {
+            color = 'yellow'; // Yellow for low priority
+        } else {
+            color = 'blue'; // Default color if no priority is set
+        }
+
+        return L.icon({
+            iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`, // Color-based pin
+            iconSize: [25, 41], // Size of the pin
+            iconAnchor: [12, 41], // Anchor point (where the pin touches the map)
+            popupAnchor: [1, -34], // Point where the popup opens
+            shadowSize: [41, 41], // Shadow size
+            className: 'custom-icon'
+        });
+    }
+
+    // Example: Dynamically add markers (can be replaced with actual emergency case data)
+    {% for case in emergency_cases %}
+        var lat = {{ case.latitude }};  // Replace with actual latitude
+        var lng = {{ case.longitude }}; // Replace with actual longitude
+        var description = "{{ case.description }}";
+        var priority = "{{ case.priority }}";  // Replace with actual priority
+
+        // Create a marker with a custom icon based on the priority
+        var marker = L.marker([lat, lng], {
+            icon: getMarkerIcon(priority) // Set the icon based on the priority
+        }).addTo(map);
+
+        marker.bindPopup("<b>Emergency case</b><br><b>Description:</b> " + description).openPopup();
+    {% endfor %}
+</script>
+
 </body>
 </html>

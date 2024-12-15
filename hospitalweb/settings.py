@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'facture',
     'appointment',
     'bootstrap5',
+    'urgence',
 ]
 
 MIDDLEWARE = [
