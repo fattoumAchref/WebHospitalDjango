@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'facture',
     'appointment',
     'bootstrap5',
+    'face_recognition',
+    'face_recognition_models'
 ]
 
 MIDDLEWARE = [
