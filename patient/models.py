@@ -14,7 +14,16 @@ class CustomUser(AbstractUser):
     emergency_case = models.BooleanField(default=False)
     face_image = models.ImageField(upload_to='faces/', null=True, blank=True)
     face_embeddings = models.JSONField(null=True, blank=True)  # Stocke directement les embeddings sous forme de liste
-
+    antecedents_medicaux = models.TextField(blank=True, null=True)
+    poids = models.FloatField(null=True, blank=True)
+    taille = models.FloatField(null=True, blank=True) 
+    @property
+    def imc(self):
+        if self.poids and self.taille:
+            taille_metre = self.taille / 100
+            return round(self.poids / (taille_metre ** 2), 2)
+        return None
+    
     def save(self, *args, **kwargs):
         # Convertir les dates en zone horaire si elles ne le sont pas déjà
         if self.date_left and not self.date_left.tzinfo:
